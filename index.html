@@ -6,454 +6,637 @@
 <title>RoomBreaker</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#0a0a0f;--surface:#111118;--border:#1e1e2e;--accent:#ff5c35;--text:#f0eff6;--muted:#6b6a7a;--card:#13131c;--success:#4ade80; }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
-  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
-  .orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
-  .orb-1{width:500px;height:500px;background:rgba(255,92,53,.08);top:-200px;right:-100px}
-  .orb-2{width:400px;height:400px;background:rgba(255,179,71,.06);bottom:-100px;left:-100px}
-  .page{display:none;min-height:100vh;position:relative;z-index:1}
-  .page.active{display:flex;flex-direction:column}
-  #loading{align-items:center;justify-content:center}
-  .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:1rem}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  #home{align-items:center;justify-content:center;padding:2rem;text-align:center}
-  .logo-mark{font-family:'Syne',sans-serif;font-size:.75rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:3rem;display:flex;align-items:center;gap:.5rem;justify-content:center}
-  .logo-mark::before,.logo-mark::after{content:'';width:30px;height:1px;background:var(--accent);opacity:.5}
-  .home-headline{font-family:'Syne',sans-serif;font-size:clamp(3rem,8vw,5.5rem);font-weight:800;line-height:.95;letter-spacing:-.03em;margin-bottom:1.5rem}
-  .outline{color:transparent;-webkit-text-stroke:1px rgba(240,239,246,.25)}
-  .pop{color:var(--accent)}
-  .home-sub{color:var(--muted);font-size:1.05rem;font-weight:300;max-width:360px;line-height:1.6;margin-bottom:3rem}
-  .home-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem}
-  .divider-text{color:var(--muted);font-size:.8rem;display:flex;align-items:center;gap:1rem;max-width:300px;width:100%;margin-bottom:1.25rem}
-  .divider-text::before,.divider-text::after{content:'';flex:1;height:1px;background:var(--border)}
-  .join-row{display:flex;gap:.5rem;max-width:340px;width:100%}
-  .join-row input{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.85rem 1rem;font-family:'DM Sans',sans-serif;font-size:1rem;border-radius:4px;outline:none;transition:border-color .2s;text-transform:uppercase;letter-spacing:.12em}
-  .join-row input:focus{border-color:var(--accent)}
-  .join-row input::placeholder{text-transform:none;letter-spacing:0;color:var(--muted)}
-  .btn{display:inline-block;cursor:pointer;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.05em;text-transform:uppercase;border-radius:4px;transition:all .2s}
-  .btn-primary{background:var(--accent);color:white;padding:1rem 2.2rem}
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(255,92,53,.3)}
-  .btn-primary:active{transform:translateY(0)}
-  .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
-  .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);padding:.85rem 1.75rem;font-family:'DM Sans',sans-serif;font-weight:500}
-  .btn-ghost:hover{border-color:var(--muted);color:var(--text)}
-  .btn-sm{padding:.5rem 1rem;font-size:.78rem}
-  .btn-full{width:100%;text-align:center}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:2.5rem;width:100%;position:relative}
-  .card-sm{max-width:480px}
-  .card-md{max-width:520px}
-  #create{align-items:center;justify-content:center;padding:2rem}
-  .close-btn{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;line-height:1;transition:color .2s}
-  .close-btn:hover{color:var(--text)}
-  .form-group{margin-bottom:1.2rem}
-  .form-group label{display:block;font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem}
-  .form-group input,.form-group textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.85rem 1rem;font-family:'DM Sans',sans-serif;font-size:.95rem;border-radius:6px;outline:none;transition:border-color .2s;resize:none}
-  .form-group input:focus,.form-group textarea:focus{border-color:var(--accent)}
-  .form-group input::placeholder,.form-group textarea::placeholder{color:var(--muted)}
-  #host-share{align-items:center;justify-content:center;padding:2rem}
-  .code-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.5rem;margin:1.25rem 0;display:flex;align-items:center;justify-content:space-between;gap:1rem}
-  .room-code{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;letter-spacing:.25em;color:var(--accent)}
-  .copy-btn{background:var(--border);border:none;color:var(--text);padding:.5rem 1rem;border-radius:4px;cursor:pointer;font-size:.78rem;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap}
-  .copy-btn:hover{background:var(--accent)}
-  .copy-btn.copied{background:var(--success);color:#000}
-  .share-url{color:var(--muted);font-size:.78rem;word-break:break-all;margin-bottom:1.25rem;line-height:1.5}
-  .qr-box{width:148px;height:148px;background:white;border-radius:8px;margin:0 auto 1.25rem;padding:4px;overflow:hidden}
-  .qr-box img{width:100%;height:100%;border-radius:4px}
-  .live-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:100px;padding:.4rem 1rem;font-size:.82rem;color:var(--success);margin-bottom:1.5rem}
-  .pulse{width:8px;height:8px;background:var(--success);border-radius:50%;animation:pulse 2s infinite}
-  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
-  .share-actions{display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center}
-  #participant{align-items:center;justify-content:center;padding:2rem}
-  .room-pill{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,92,53,.1);border:1px solid rgba(255,92,53,.2);border-radius:100px;padding:.3rem .8rem;font-size:.73rem;color:var(--accent);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.06em;margin-bottom:1.25rem}
-  .steps-bar{display:flex;gap:.4rem;margin-bottom:1.75rem}
-  .step{height:3px;flex:1;background:var(--border);border-radius:2px;transition:background .35s}
-  .step.active{background:var(--accent)}
-  .step.done{background:var(--success)}
-  .pstep{display:none}
-  .pstep.show{display:block}
-  .cam-wrap{position:relative;width:100%;aspect-ratio:4/3;background:#000;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-bottom:.5rem}
-  .cam-wrap video,.cam-wrap img{width:100%;height:100%;object-fit:cover;display:block}
-  .cam-controls{position:absolute;bottom:0;left:0;right:0;padding:1rem;background:linear-gradient(transparent,rgba(0,0,0,.75));display:flex;align-items:center;justify-content:center;gap:1rem}
-  .shutter{width:58px;height:58px;border-radius:50%;background:white;border:3px solid rgba(255,255,255,.4);cursor:pointer;transition:transform .15s}
-  .shutter:hover{transform:scale(1.06)}
-  .shutter:active{transform:scale(.94)}
-  .retake{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:white;padding:.5rem 1rem;border-radius:100px;cursor:pointer;font-size:.82rem;font-family:'DM Sans';display:none}
-  .retake:hover{background:rgba(255,255,255,.25)}
-  .file-alt{text-align:center;margin-top:.4rem}
-  .file-alt label{color:var(--muted);font-size:.78rem;cursor:pointer;text-decoration:underline}
-  .file-alt label:hover{color:var(--text)}
-  .file-alt input{display:none}
-  #gallery{padding:2rem;flex-direction:column}
-  .gallery-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;gap:1rem;flex-wrap:wrap}
-  .gallery-top h1{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800}
-  .gallery-top h1 span{color:var(--accent)}
-  .gallery-actions{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1.2rem}
-  .person-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:transform .2s,border-color .2s;animation:cardIn .35s ease both}
-  @keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
-  .person-card:hover{transform:translateY(-3px);border-color:rgba(255,92,53,.3)}
-  .person-photo{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--surface)}
-  .no-photo{width:100%;aspect-ratio:1;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:3rem}
-  .person-info{padding:.9rem 1rem}
-  .person-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:.55rem}
-  .fact{display:flex;gap:.35rem;font-size:.78rem;color:var(--muted);margin-bottom:.35rem;line-height:1.4;align-items:flex-start}
-  .fact span:first-child{flex-shrink:0}
-  .empty{grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--muted)}
-  .empty-icon{font-size:3rem;margin-bottom:1rem}
-  #success{align-items:center;justify-content:center;padding:2rem}
-  .success-ring{width:80px;height:80px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.5rem;animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
-  @keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
-  #toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(120px);background:var(--success);color:#000;padding:.75rem 1.5rem;border-radius:100px;font-weight:500;font-size:.88rem;z-index:9999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none}
-  #toast.show{transform:translateX(-50%) translateY(0)}
-  #toast.err{background:#ff4444;color:white}
-  .mt-2{margin-top:1rem}.text-muted{color:var(--muted);font-size:.85rem}.text-center{text-align:center}
-  h2.ct{font-family:'Syne',sans-serif;font-size:1.55rem;font-weight:800;margin-bottom:.3rem}
-  p.cs{color:var(--muted);font-size:.88rem;margin-bottom:1.75rem}
-  @media(max-width:480px){.card{padding:1.5rem}.room-code{font-size:1.5rem}.grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr))}.gallery-top{flex-direction:column}}
+:root{--bg:#0a0a0f;--surface:#111118;--border:#1e1e2e;--accent:#ff5c35;--accent2:#ffb347;--text:#f0eff6;--muted:#6b6a7a;--card:#13131c;--success:#4ade80}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+.orb-1{width:500px;height:500px;background:rgba(255,92,53,.08);top:-200px;right:-100px}
+.orb-2{width:400px;height:400px;background:rgba(255,179,71,.06);bottom:-100px;left:-100px}
+.page{display:none;min-height:100vh;position:relative;z-index:1;padding:1.5rem}
+.page.active{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.page.top{justify-content:flex-start}
+.logo{font-family:'Syne',sans-serif;font-size:.75rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:.5rem;justify-content:center;margin-bottom:2rem}
+.logo::before,.logo::after{content:'';width:24px;height:1px;background:var(--accent);opacity:.5}
+h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:.3rem}
+.sub{color:var(--muted);font-size:.9rem;line-height:1.6;margin-bottom:1.5rem}
+.btn{cursor:pointer;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;border-radius:6px;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:.4rem}
+.btn-primary{background:var(--accent);color:white;padding:.9rem 2rem}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(255,92,53,.3)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);padding:.8rem 1.5rem;font-family:'DM Sans',sans-serif;font-weight:500}
+.btn-ghost:hover{border-color:var(--muted);color:var(--text)}
+.btn-success{background:var(--success);color:#000;padding:.9rem 2rem}
+.btn-full{width:100%}
+.btn-lg{padding:1.1rem 2.5rem;font-size:1rem}
+.btn-sm{padding:.5rem 1rem;font-size:.75rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:2rem;width:100%;position:relative}
+.card-sm{max-width:460px}
+.fg{margin-bottom:1.1rem}
+.fg label{display:block;font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.fg input,.fg textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.8rem 1rem;font-family:'DM Sans',sans-serif;font-size:.95rem;border-radius:8px;outline:none;transition:border-color .2s;resize:none}
+.fg input:focus,.fg textarea:focus{border-color:var(--accent)}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:.35rem;border-radius:100px;padding:.3rem .8rem;font-size:.72rem;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.05em}
+.pill-accent{background:rgba(255,92,53,.1);border:1px solid rgba(255,92,53,.2);color:var(--accent)}
+.pill-success{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);color:var(--success)}
+.pulse{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+.steps{display:flex;gap:.35rem;margin-bottom:1.5rem}
+.step{height:3px;flex:1;background:var(--border);border-radius:2px;transition:background .3s}
+.step.active{background:var(--accent)}
+.step.done{background:var(--success)}
+.pstep{display:none}.pstep.show{display:block}
+.hunt-card{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(255,92,53,.3);border-radius:16px;padding:1.75rem;text-align:center;margin-bottom:1.25rem;position:relative;overflow:hidden}
+.hunt-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(255,92,53,.08),transparent 60%)}
+.hunt-card .mystery{font-size:2.5rem;margin-bottom:.75rem}
+.hunt-card h3{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+.clue-list{display:flex;flex-direction:column;gap:.6rem}
+.clue{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:.7rem 1rem;display:flex;align-items:flex-start;gap:.75rem;text-align:left}
+.clue .emoji{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
+.clue-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.15rem}
+.clue-text{font-size:.88rem;color:var(--text);line-height:1.4}
+.timer-wrap{display:flex;align-items:center;gap:.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.5rem .9rem}
+.timer-num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--accent)}
+.cam-wrap{position:relative;width:100%;aspect-ratio:1;background:#000;border-radius:12px;overflow:hidden;border:2px solid var(--border);margin-bottom:.75rem}
+.cam-wrap video,.cam-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.cam-controls{position:absolute;bottom:0;left:0;right:0;padding:1rem;background:linear-gradient(transparent,rgba(0,0,0,.8));display:flex;align-items:center;justify-content:center;gap:1rem}
+.shutter{width:60px;height:60px;border-radius:50%;background:white;border:3px solid rgba(255,255,255,.4);cursor:pointer;transition:transform .15s;flex-shrink:0}
+.shutter:hover{transform:scale(1.06)}.shutter:active{transform:scale(.94)}
+.retake-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:white;padding:.45rem .9rem;border-radius:100px;cursor:pointer;font-size:.8rem;font-family:'DM Sans';display:none}
+.file-alt{text-align:center;margin-top:.35rem}
+.file-alt label{color:var(--muted);font-size:.75rem;cursor:pointer;text-decoration:underline}
+.file-alt input{display:none}
+.lb-row{display:flex;align-items:center;gap:.75rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem;margin-bottom:.5rem;animation:rowIn .3s ease both}
+@keyframes rowIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+.lb-row.top1{border-color:rgba(255,215,0,.3);background:rgba(255,215,0,.04)}
+.lb-row.top2{border-color:rgba(192,192,192,.3)}
+.lb-row.top3{border-color:rgba(205,127,50,.3)}
+.lb-rank{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;width:26px;text-align:center;flex-shrink:0}
+.lb-name{flex:1;font-size:.9rem}
+.lb-score{font-family:'Syne',sans-serif;font-weight:800;color:var(--accent)}
+.lb-thumb{width:32px;height:32px;border-radius:5px;object-fit:cover;border:1px solid var(--border)}
+.waiting-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.6rem;width:100%;max-width:580px;margin-bottom:1.5rem}
+.waiting-chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.55rem .8rem;font-size:.8rem;display:flex;align-items:center;gap:.4rem;animation:chipIn .3s ease both}
+@keyframes chipIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
+.code-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;margin:1rem 0;display:flex;align-items:center;justify-content:space-between;gap:1rem;width:100%;max-width:580px}
+.room-code{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;letter-spacing:.2em;color:var(--accent)}
+.copy-btn{background:var(--border);border:none;color:var(--text);padding:.45rem .9rem;border-radius:4px;cursor:pointer;font-size:.75rem;font-family:'DM Sans';transition:all .2s;white-space:nowrap}
+.copy-btn:hover{background:var(--accent)}.copy-btn.copied{background:var(--success);color:#000}
+.found-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:flex;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(8px)}
+.found-overlay.hidden{display:none}
+.found-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.75rem;width:100%;max-width:400px}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:.75rem;margin:1.5rem 0}
+.podium-slot{display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.podium-bar{border-radius:8px 8px 0 0;width:75px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+.podium-bar.p1{height:90px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4)}
+.podium-bar.p2{height:65px;background:rgba(192,192,192,.12);border:1px solid rgba(192,192,192,.3)}
+.podium-bar.p3{height:48px;background:rgba(205,127,50,.12);border:1px solid rgba(205,127,50,.3)}
+.podium-name{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;text-align:center;max-width:75px;word-break:break-word}
+.podium-score{font-size:.8rem;color:var(--accent);font-weight:700}
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(120px);background:var(--success);color:#000;padding:.7rem 1.4rem;border-radius:100px;font-weight:500;font-size:.85rem;z-index:9999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.err{background:#ff4444;color:white}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.gap-row{display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center}
+.host-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;width:100%;max-width:580px;flex-wrap:wrap;margin-bottom:1rem}
+@media(max-width:480px){.card{padding:1.5rem}.room-code{font-size:1.4rem}}
 </style>
 </head>
 <body>
 <div class="orb orb-1"></div><div class="orb orb-2"></div>
 <div id="toast"></div>
  
-<div class="page active" id="loading">
-  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;min-height:100vh;">
-    <div class="spinner"></div>
-    <div class="text-muted">Connecting...</div>
-  </div>
-</div>
- 
-<div class="page" id="home">
-  <div class="logo-mark">RoomBreaker</div>
-  <h1 class="home-headline">Break<br><span class="outline">the awkward</span><br><span class="pop">silence.</span></h1>
-  <p class="home-sub">Create a room, share a link, collect selfies and fun facts from your whole team.</p>
-  <div class="home-actions">
-    <button class="btn btn-primary" onclick="showPage('create')">Create a Room →</button>
-  </div>
-  <div class="divider-text">or join with a code</div>
-  <div class="join-row">
-    <input id="join-input" type="text" placeholder="Enter room code" maxlength="6" onkeydown="if(event.key==='Enter')joinRoom()">
-    <button class="btn btn-primary" style="padding:.85rem 1.2rem;" onclick="joinRoom()">Join</button>
-  </div>
-</div>
- 
-<div class="page" id="create">
-  <div class="card card-sm" style="margin:auto 1rem;">
-    <button class="close-btn" onclick="showPage('home')">✕</button>
-    <h2 class="ct">Create a Room</h2>
-    <p class="cs">Name your room and you're ready to share.</p>
-    <div class="form-group"><label>Room Name</label><input id="room-name" type="text" placeholder="e.g. Oslo Design Summit" maxlength="40"></div>
-    <div class="form-group"><label>Your Name (Host)</label><input id="host-name" type="text" placeholder="e.g. Hari" maxlength="30"></div>
-    <button class="btn btn-primary btn-full mt-2" id="create-btn" onclick="createRoom()">Create Room →</button>
-  </div>
-</div>
- 
-<div class="page" id="host-share">
-  <div class="card card-md text-center" style="margin:auto 1rem;">
-    <div class="logo-mark" style="justify-content:center;margin-bottom:1.25rem;">RoomBreaker</div>
-    <h2 class="ct" id="share-title">Room Ready!</h2>
-    <p class="cs" id="share-sub">Share this code with your participants</p>
-    <div class="code-box">
-      <div class="room-code" id="share-code">------</div>
-      <button class="copy-btn" id="copy-code-btn" onclick="copyCode()">Copy Code</button>
+<!-- FOUND OVERLAY -->
+<div class="found-overlay hidden" id="found-overlay">
+  <div class="found-card">
+    <div style="text-align:center;margin-bottom:1rem">
+      <div style="font-size:2rem;margin-bottom:.4rem">📸</div>
+      <h2 class="title" style="font-size:1.2rem;margin-bottom:.2rem">Found them!</h2>
+      <p style="color:var(--muted);font-size:.85rem">Take a selfie with <strong id="found-name" style="color:var(--accent)"></strong>!</p>
     </div>
-    <div class="qr-box"><img id="qr-img" src="" alt="QR Code"></div>
-    <div class="share-url" id="share-url"></div>
-    <div class="live-badge"><div class="pulse"></div><span id="share-count">0 responses</span></div>
-    <div class="share-actions">
-      <button class="btn btn-primary" onclick="showGallery()">View Gallery →</button>
-      <button class="btn btn-ghost" onclick="copyLink()">Copy Link</button>
-    </div>
-  </div>
-</div>
- 
-<div class="page" id="participant">
-  <div class="card card-sm" style="margin:auto 1rem;">
-    <div class="room-pill" id="p-room-pill">● ROOM</div>
-    <h2 class="ct">Hey, introduce yourself! 👋</h2>
-    <p class="cs">Quick questions — under 2 minutes.</p>
-    <div class="steps-bar">
-      <div class="step active" id="s0"></div><div class="step" id="s1"></div>
-      <div class="step" id="s2"></div><div class="step" id="s3"></div>
-    </div>
-    <div class="pstep show" id="ps0">
-      <div class="form-group"><label>Your Name</label><input id="p-name" type="text" placeholder="What do people call you?" maxlength="30"></div>
-      <button class="btn btn-primary btn-full mt-2" onclick="nextStep(0)">Next →</button>
-    </div>
-    <div class="pstep" id="ps1">
-      <div class="form-group"><label>🍜 Favourite Food</label><input id="p-food" type="text" placeholder="The one dish you'd never say no to..." maxlength="60"></div>
-      <button class="btn btn-primary btn-full mt-2" onclick="nextStep(1)">Next →</button>
-    </div>
-    <div class="pstep" id="ps2">
-      <div class="form-group"><label>🎉 A Fun Fact About You</label><textarea id="p-fact" rows="3" placeholder="Something that would surprise people..." maxlength="150"></textarea></div>
-      <button class="btn btn-primary btn-full mt-2" onclick="nextStep(2)">Next →</button>
-    </div>
-    <div class="pstep" id="ps3">
-      <div class="form-group"><label>☀️ One thing you love doing on weekends?</label><input id="p-weekend" type="text" placeholder="e.g. hiking, making coffee, gaming..." maxlength="80"></div>
-      <div class="form-group">
-        <label>📸 Take a Selfie</label>
-        <div class="cam-wrap">
-          <video id="cam-video" autoplay playsinline muted></video>
-          <img id="selfie-img" style="display:none;" alt="selfie">
-          <div class="cam-controls">
-            <button class="retake" id="retake-btn" onclick="retake()">↩ Retake</button>
-            <button class="shutter" id="shutter-btn" onclick="snap()" title="Take selfie"></button>
-          </div>
-        </div>
-        <div class="file-alt">
-          <label for="file-upload">No camera? Upload a photo instead</label>
-          <input type="file" id="file-upload" accept="image/*" onchange="fileUpload(event)">
-        </div>
+    <div class="cam-wrap">
+      <video id="found-video" autoplay playsinline muted></video>
+      <img id="found-photo" style="display:none" alt="capture">
+      <div class="cam-controls">
+        <button class="retake-btn" id="found-retake" onclick="foundRetake()">↩ Retake</button>
+        <button class="shutter" onclick="foundSnap()"></button>
       </div>
-      <button class="btn btn-primary btn-full mt-2" id="submit-btn" onclick="submitResponse()">Submit →</button>
+    </div>
+    <div class="file-alt"><label for="found-upload">Upload photo instead</label><input type="file" id="found-upload" accept="image/*" onchange="foundFileUpload(event)"></div>
+    <div style="display:flex;gap:.6rem;margin-top:.9rem">
+      <button class="btn btn-ghost btn-full" onclick="closeFoundOverlay()">Cancel</button>
+      <button class="btn btn-success btn-full" id="submit-found-btn" onclick="submitFound()">Submit ✓</button>
     </div>
   </div>
 </div>
  
-<div class="page" id="success">
-  <div style="max-width:380px;width:100%;margin:auto;padding:2rem;text-align:center;">
-    <div class="success-ring">🎉</div>
-    <h2 style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:.5rem;">You're in!</h2>
-    <p style="color:var(--muted);line-height:1.6;margin-bottom:2rem;">Your card has been added to the room. The host can see you in the gallery!</p>
-    <button class="btn btn-ghost btn-full" onclick="showPage('home')">Back to Home</button>
+<!-- LOADING -->
+<div class="page active" id="pg-loading">
+  <div class="spinner"></div>
+  <div style="color:var(--muted);font-size:.85rem;margin-top:.75rem">Connecting...</div>
+</div>
+ 
+<!-- HOME -->
+<div class="page" id="pg-home">
+  <div class="logo">RoomBreaker</div>
+  <h1 style="font-family:'Syne',sans-serif;font-size:clamp(2.5rem,7vw,4.5rem);font-weight:800;line-height:.95;letter-spacing:-.03em;margin-bottom:1rem;text-align:center">Find your<br><span style="color:var(--accent)">people.</span></h1>
+  <p style="color:var(--muted);font-size:.95rem;max-width:300px;text-align:center;line-height:1.6;margin-bottom:2rem">Answer 4 questions, get a mystery card, hunt down the match!</p>
+  <div class="gap-row" style="margin-bottom:2rem">
+    <button class="btn btn-primary btn-lg" onclick="showPage('pg-create')">Create Room</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:1rem;max-width:300px;width:100%;margin-bottom:1rem">
+    <div style="flex:1;height:1px;background:var(--border)"></div>
+    <span style="color:var(--muted);font-size:.8rem">or join</span>
+    <div style="flex:1;height:1px;background:var(--border)"></div>
+  </div>
+  <div style="display:flex;gap:.5rem;max-width:320px;width:100%">
+    <input id="join-input" type="text" style="flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.8rem 1rem;font-family:'DM Sans',sans-serif;font-size:1rem;border-radius:6px;outline:none;transition:border-color .2s;text-transform:uppercase;letter-spacing:.12em" placeholder="Room code" maxlength="6" onkeydown="if(event.key==='Enter')joinRoom()" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+    <button class="btn btn-primary" onclick="joinRoom()">Join</button>
   </div>
 </div>
  
-<div class="page" id="gallery">
-  <div class="gallery-top">
+<!-- CREATE -->
+<div class="page" id="pg-create">
+  <div class="card card-sm">
+    <button onclick="showPage('pg-home')" style="position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem">✕</button>
+    <h2 class="title">Create a Room</h2>
+    <p class="sub">Set up your scavenger hunt for up to 25 players.</p>
+    <div class="fg"><label>Room Name</label><input id="room-name" type="text" placeholder="e.g. Oslo Design Summit" maxlength="40"></div>
+    <div class="fg"><label>Your Name (Host)</label><input id="host-name" type="text" placeholder="e.g. Hari" maxlength="30"></div>
+    <button class="btn btn-primary btn-full" style="margin-top:.75rem" id="create-btn" onclick="createRoom()">Create Room →</button>
+  </div>
+</div>
+ 
+<!-- HOST LOBBY -->
+<div class="page top" id="pg-host-lobby" style="padding-top:2rem">
+  <div class="logo" style="margin-bottom:1rem">RoomBreaker</div>
+  <div class="host-bar">
     <div>
-      <h1>Room: <span id="g-room-name">—</span></h1>
-      <div class="text-muted" style="margin-top:.25rem;" id="g-code"></div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem" id="hl-name">Room</div>
+      <div style="color:var(--muted);font-size:.78rem;margin-top:.1rem" id="hl-host">Host</div>
     </div>
-    <div class="gallery-actions">
-      <div class="live-badge"><div class="pulse"></div><span id="g-count">0 responses</span></div>
-      <button class="btn btn-ghost btn-sm" onclick="copyLink()">Share Link</button>
-      <button class="btn btn-ghost btn-sm" onclick="showPage('home')">← Home</button>
+    <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+      <div class="pill pill-success"><div class="pulse"></div><span id="hl-count">0 joined</span></div>
+      <button class="copy-btn" onclick="hostCopyLink()">Copy Link</button>
     </div>
   </div>
-  <div class="grid" id="people-grid">
-    <div class="empty"><div class="empty-icon">🪑</div><p>No one's joined yet.<br>Share the code to get started.</p></div>
+  <div class="code-box">
+    <div class="room-code" id="hl-code">------</div>
+    <button class="copy-btn" id="hl-copy-code" onclick="hostCopyCode()">Copy Code</button>
+  </div>
+  <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem;text-align:center">Waiting for players to answer questions...</p>
+  <div class="waiting-grid" id="waiting-grid"></div>
+  <button class="btn btn-primary btn-lg" id="start-btn" onclick="startGame()" disabled>Start Game 🎮</button>
+  <p style="color:var(--muted);font-size:.72rem;margin-top:.5rem">Need at least 2 players to start</p>
+</div>
+ 
+<!-- PARTICIPANT FORM -->
+<div class="page" id="pg-form">
+  <div class="card card-sm">
+    <div class="pill pill-accent" id="form-pill" style="margin-bottom:1.25rem">● ROOM</div>
+    <h2 class="title">Introduce yourself! 👋</h2>
+    <p class="sub">You'll become a mystery card someone has to find.</p>
+    <div class="steps"><div class="step active" id="fs0"></div><div class="step" id="fs1"></div><div class="step" id="fs2"></div><div class="step" id="fs3"></div></div>
+    <div class="pstep show" id="fp0">
+      <div class="fg"><label>Your Name</label><input id="p-name" type="text" placeholder="What do people call you?" maxlength="30"></div>
+      <button class="btn btn-primary btn-full" style="margin-top:.5rem" onclick="formNext(0)">Next →</button>
+    </div>
+    <div class="pstep" id="fp1">
+      <div class="fg"><label>🍜 Favourite Food</label><input id="p-food" type="text" placeholder="The dish you'd never say no to..." maxlength="60"></div>
+      <button class="btn btn-primary btn-full" style="margin-top:.5rem" onclick="formNext(1)">Next →</button>
+    </div>
+    <div class="pstep" id="fp2">
+      <div class="fg"><label>🎉 A Fun Fact About You</label><textarea id="p-fact" rows="3" placeholder="Something that would surprise people..." maxlength="150"></textarea></div>
+      <button class="btn btn-primary btn-full" style="margin-top:.5rem" onclick="formNext(2)">Next →</button>
+    </div>
+    <div class="pstep" id="fp3">
+      <div class="fg"><label>☀️ One thing you love on weekends?</label><input id="p-weekend" type="text" placeholder="e.g. hiking, making coffee, gaming..." maxlength="80"></div>
+      <button class="btn btn-primary btn-full" style="margin-top:.5rem" id="form-submit-btn" onclick="submitForm()">Submit Answers →</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- WAITING FOR GAME -->
+<div class="page" id="pg-waiting">
+  <div style="text-align:center;max-width:320px">
+    <div style="font-size:3rem;margin-bottom:1rem">⏳</div>
+    <h2 class="title">You're in!</h2>
+    <p class="sub" style="text-align:center">Waiting for the host to start the game...<br>Get ready to hunt! 🎯</p>
+    <div class="pill pill-success" style="margin:0 auto"><div class="pulse"></div><span id="waiting-count">0 ready</span></div>
+  </div>
+</div>
+ 
+<!-- HUNT (PLAYER) -->
+<div class="page" id="pg-hunt">
+  <div style="width:100%;max-width:440px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
+      <div class="pill pill-accent" id="hunt-pill">● ROOM</div>
+      <div class="timer-wrap"><span style="font-size:.8rem;margin-right:.25rem">⏱</span><span class="timer-num" id="p-timer">15:00</span></div>
+      <div class="pill pill-success"><div class="pulse"></div><span id="hunt-score">0 found</span></div>
+    </div>
+    <div class="hunt-card">
+      <div class="mystery">🕵️</div>
+      <h3>Find this person</h3>
+      <div class="clue-list">
+        <div class="clue"><span class="emoji">🍜</span><div><div class="clue-label">Favourite Food</div><div class="clue-text" id="clue-food">—</div></div></div>
+        <div class="clue"><span class="emoji">🎉</span><div><div class="clue-label">Fun Fact</div><div class="clue-text" id="clue-fact">—</div></div></div>
+        <div class="clue"><span class="emoji">☀️</span><div><div class="clue-label">Loves on weekends</div><div class="clue-text" id="clue-weekend">—</div></div></div>
+      </div>
+    </div>
+    <div id="hunt-found-msg" style="display:none;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:10px;padding:.9rem;text-align:center;margin-bottom:.9rem">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--success)">✅ Found! Getting next target...</div>
+    </div>
+    <button class="btn btn-primary btn-full btn-lg" id="found-btn" onclick="openFoundOverlay()">📸 I Found Them!</button>
+    <div style="margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem">
+      <div style="font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">🏆 Live Leaderboard</div>
+      <div id="mini-lb"></div>
+    </div>
+  </div>
+</div>
+ 
+<!-- HOST GAME VIEW -->
+<div class="page top" id="pg-host-game" style="padding-top:1.5rem">
+  <div style="width:100%;max-width:600px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem">
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem" id="hg-name">Room</div>
+        <div style="color:var(--muted);font-size:.78rem">Host View</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+        <div class="timer-wrap"><span style="font-size:.8rem;margin-right:.25rem">⏱</span><span class="timer-num" id="h-timer">15:00</span></div>
+        <button class="btn btn-ghost btn-sm" onclick="endGame()">End Game</button>
+      </div>
+    </div>
+    <div style="font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">🏆 Live Leaderboard</div>
+    <div id="host-lb"></div>
+  </div>
+</div>
+ 
+<!-- GAME OVER -->
+<div class="page" id="pg-gameover">
+  <div style="width:100%;max-width:520px;text-align:center">
+    <div style="font-size:2.5rem;margin-bottom:.5rem">🎉</div>
+    <h2 class="title" style="font-size:2rem;margin-bottom:.2rem">Time's Up!</h2>
+    <p class="sub" style="text-align:center">Here's how everyone did</p>
+    <div class="podium" id="podium"></div>
+    <div id="final-lb" style="margin-bottom:1.5rem;text-align:left"></div>
+    <button class="btn btn-primary" onclick="showPage('pg-home')">Back to Home</button>
   </div>
 </div>
  
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, set, get, push, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, get, push, update, onValue, off, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
  
-  const firebaseConfig = {
-    apiKey: "AIzaSyBtfOQOyYawigdWkRUuBg1OrknDKFVtPBQ",
-    authDomain: "roombreaker-238bc.firebaseapp.com",
-    databaseURL: "https://roombreaker-238bc-default-rtdb.firebaseio.com",
-    projectId: "roombreaker-238bc",
-    storageBucket: "roombreaker-238bc.firebasestorage.app",
-    messagingSenderId: "410279961940",
-    appId: "1:410279961940:web:7c2973ede0eb2f1d64d4c1"
+const firebaseConfig = {
+  apiKey: "AIzaSyBtfOQOyYawigdWkRUuBg1OrknDKFVtPBQ",
+  authDomain: "roombreaker-238bc.firebaseapp.com",
+  databaseURL: "https://roombreaker-238bc-default-rtdb.firebaseio.com",
+  projectId: "roombreaker-238bc",
+  storageBucket: "roombreaker-238bc.firebasestorage.app",
+  messagingSenderId: "410279961940",
+  appId: "1:410279961940:web:7c2973ede0eb2f1d64d4c1"
+};
+ 
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+ 
+let roomCode = null, myPid = null, myTargetId = null, isHost = false;
+let gameTimer = null, foundCamStream = null, foundPhoto = null;
+ 
+function genCode(){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; return Array.from({length:6},()=>c[Math.floor(Math.random()*c.length)]).join(''); }
+function genId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function roomURL(c){ return `${location.origin}${location.pathname}?room=${c}`; }
+ 
+let toastT;
+window.showToast = (msg, err=false) => {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = 'show' + (err?' err':'');
+  clearTimeout(toastT); toastT = setTimeout(() => el.className='', 2800);
+};
+window.showPage = (name) => {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  window.scrollTo(0,0);
+};
+function updateURL(c){ history.replaceState(null,'', c ? `?room=${c}` : location.pathname); }
+ 
+// CREATE
+window.createRoom = async () => {
+  const name = document.getElementById('room-name').value.trim();
+  const host = document.getElementById('host-name').value.trim();
+  if(!name){ showToast('Enter a room name','err'); return; }
+  if(!host){ showToast('Enter your name','err'); return; }
+  const btn = document.getElementById('create-btn');
+  btn.disabled=true; btn.textContent='Creating...';
+  const code = genCode();
+  await set(ref(db,`rooms/${code}`), { name, host, status:'lobby', created: serverTimestamp(), players:{} });
+  btn.disabled=false; btn.textContent='Create Room →';
+  roomCode=code; isHost=true;
+  updateURL(code);
+  document.getElementById('hl-name').textContent = name;
+  document.getElementById('hl-host').textContent = `Hosted by ${host}`;
+  document.getElementById('hl-code').textContent = code;
+  showPage('pg-host-lobby');
+  listenLobby(code);
+};
+window.hostCopyLink = () => { navigator.clipboard.writeText(roomURL(roomCode)); showToast('Link copied!'); };
+window.hostCopyCode = () => {
+  navigator.clipboard.writeText(roomCode);
+  const btn = document.getElementById('hl-copy-code');
+  btn.textContent='✓ Copied!'; btn.classList.add('copied');
+  setTimeout(()=>{ btn.textContent='Copy Code'; btn.classList.remove('copied'); }, 2000);
+};
+ 
+function listenLobby(code) {
+  onValue(ref(db,`rooms/${code}/players`), snap => {
+    const players = snap.exists() ? snap.val() : {};
+    const all = Object.values(players);
+    const ready = all.filter(p => p.answered);
+    document.getElementById('hl-count').textContent = `${all.length} joined`;
+    const btn = document.getElementById('start-btn');
+    btn.disabled = ready.length < 2;
+    btn.textContent = ready.length < 2 ? 'Start Game 🎮' : `Start Game 🎮 (${ready.length} ready)`;
+    document.getElementById('waiting-grid').innerHTML = all.map((p,i) => `
+      <div class="waiting-chip" style="animation-delay:${i*.04}s">
+        <div style="width:7px;height:7px;border-radius:50%;background:${p.answered?'var(--success)':'var(--accent2)'};flex-shrink:0"></div>
+        <span>${esc(p.name)}</span>${p.answered?'<span style="color:var(--success);font-size:.7rem">✓</span>':''}
+      </div>`).join('');
+    document.getElementById('waiting-count').textContent = `${ready.length} ready`;
+  });
+}
+ 
+// JOIN
+window.joinRoom = async () => {
+  const code = document.getElementById('join-input').value.trim().toUpperCase();
+  if(!code){ showToast('Enter a room code','err'); return; }
+  await loadRoom(code);
+};
+ 
+async function loadRoom(code) {
+  const snap = await get(ref(db,`rooms/${code}`));
+  if(!snap.exists()){ showToast('Room not found','err'); return; }
+  const room = snap.val();
+  if(room.status==='playing'){ showToast('Game already started!','err'); return; }
+  if(room.status==='ended'){ showToast('This game has ended','err'); return; }
+  roomCode=code;
+  document.getElementById('form-pill').textContent = `● ${room.name}`;
+  updateURL(code);
+  showPage('pg-form');
+}
+ 
+// FORM
+window.formNext = (from) => {
+  const ids=['p-name','p-food','p-fact','p-weekend'];
+  if(!document.getElementById(ids[from]).value.trim()){ showToast('Fill this in first 😊','err'); return; }
+  document.getElementById(`fp${from}`).classList.remove('show');
+  document.getElementById(`fp${from+1}`).classList.add('show');
+  [0,1,2,3].forEach(i => {
+    document.getElementById(`fs${i}`).className = 'step'+(i<from+1?' done':i===from+1?' active':'');
+  });
+};
+ 
+window.submitForm = async () => {
+  const weekend = document.getElementById('p-weekend').value.trim();
+  if(!weekend){ showToast('Fill this in!','err'); return; }
+  const btn = document.getElementById('form-submit-btn');
+  btn.disabled=true; btn.textContent='Submitting...';
+  const pid = genId();
+  myPid = pid;
+  const player = {
+    name: document.getElementById('p-name').value.trim(),
+    food: document.getElementById('p-food').value.trim(),
+    fact: document.getElementById('p-fact').value.trim(),
+    weekend, answered:true, score:0, photos:{}, ts:Date.now()
   };
+  await set(ref(db,`rooms/${roomCode}/players/${pid}`), player);
+  btn.disabled=false; btn.textContent='Submit Answers →';
+  showPage('pg-waiting');
+  // Listen for game start
+  onValue(ref(db,`rooms/${roomCode}`), snap => {
+    if(!snap.exists()) return;
+    const room = snap.val();
+    document.getElementById('waiting-count').textContent = `${Object.values(room.players||{}).filter(p=>p.answered).length} ready`;
+    if(room.status==='playing'){ off(ref(db,`rooms/${roomCode}`)); startPlayerHunt(room); }
+    if(room.status==='ended'){ off(ref(db,`rooms/${roomCode}`)); showGameOver(room); }
+  });
+};
  
-  const app = initializeApp(firebaseConfig);
-  const db  = getDatabase(app);
+// START GAME (HOST)
+window.startGame = async () => {
+  const snap = await get(ref(db,`rooms/${roomCode}`));
+  const room = snap.val();
+  const pids = Object.keys(room.players||{});
+  const shuffled = [...pids].sort(()=>Math.random()-.5);
+  const assignments = {};
+  shuffled.forEach((pid,i) => { assignments[pid] = shuffled[(i+1)%shuffled.length]; });
+  await update(ref(db,`rooms/${roomCode}`), { status:'playing', startedAt:Date.now(), duration:900, assignments });
+  document.getElementById('hg-name').textContent = room.name;
+  showPage('pg-host-game');
+  startTimer('h-timer', 900, Date.now(), true);
+  listenLB('host-lb', true);
+};
  
-  let currentRoomCode = null;
-  let capturedSelfie  = null;
-  let camStream       = null;
-  let galleryUnsub    = null;
+// PLAYER HUNT
+function startPlayerHunt(room) {
+  const assignments = room.assignments||{};
+  myTargetId = assignments[myPid];
+  if(!myTargetId){ showToast('No target assigned','err'); return; }
+  setTarget(room.players||{}, myTargetId);
+  document.getElementById('hunt-pill').textContent = `● ${room.name}`;
+  document.getElementById('hunt-found-msg').style.display='none';
+  document.getElementById('found-btn').style.display='block';
+  showPage('pg-hunt');
+  startTimer('p-timer', room.duration||900, room.startedAt, false);
+  listenLB('mini-lb', false);
+  // Listen my score
+  onValue(ref(db,`rooms/${roomCode}/players/${myPid}/photos`), snap => {
+    const count = snap.exists() ? Object.keys(snap.val()).length : 0;
+    document.getElementById('hunt-score').textContent = `${count} found`;
+  });
+  // Listen game end
+  onValue(ref(db,`rooms/${roomCode}/status`), snap => {
+    if(snap.val()==='ended'){ clearInterval(gameTimer); get(ref(db,`rooms/${roomCode}`)).then(s=>showGameOver(s.val())); }
+  });
+}
  
-  function genCode(){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; return Array.from({length:6},()=>c[Math.floor(Math.random()*c.length)]).join(''); }
-  function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  function roomURL(code){ return `${location.origin}${location.pathname}?room=${code}`; }
+function setTarget(players, tid) {
+  const t = players[tid];
+  if(!t) return;
+  document.getElementById('clue-food').textContent = t.food;
+  document.getElementById('clue-fact').textContent = t.fact;
+  document.getElementById('clue-weekend').textContent = t.weekend;
+  document.getElementById('found-name').textContent = t.name;
+}
  
-  let toastT;
-  window.showToast = (msg,err=false)=>{
-    const el=document.getElementById('toast');
-    el.textContent=msg; el.className='show'+(err?' err':'');
-    clearTimeout(toastT); toastT=setTimeout(()=>el.className='',2800);
-  };
- 
-  window.showPage = (name)=>{
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    document.getElementById(name).classList.add('active');
-    window.scrollTo(0,0);
-  };
- 
-  function updateURL(code){ history.replaceState(null,'',code?`?room=${code}`:location.pathname); }
- 
-  window.createRoom = async ()=>{
-    const name=document.getElementById('room-name').value.trim();
-    const host=document.getElementById('host-name').value.trim();
-    if(!name){showToast('Enter a room name','err');return;}
-    if(!host){showToast('Enter your name','err');return;}
-    const btn=document.getElementById('create-btn');
-    btn.disabled=true; btn.textContent='Creating...';
-    const code=genCode();
-    await set(ref(db,`rooms/${code}`),{name,host,created:serverTimestamp(),responses:{}});
-    btn.disabled=false; btn.textContent='Create Room →';
-    currentRoomCode=code;
-    showHostShare(code,name,host);
-  };
- 
-  function showHostShare(code,name,host){
-    document.getElementById('share-title').textContent=name;
-    document.getElementById('share-sub').textContent=`Hosted by ${host}`;
-    document.getElementById('share-code').textContent=code;
-    const url=roomURL(code);
-    document.getElementById('share-url').textContent=url;
-    document.getElementById('qr-img').src=`https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(url)}&bgcolor=ffffff&color=0a0a0f&margin=2`;
-    updateURL(code);
-    showPage('host-share');
-    onValue(ref(db,`rooms/${code}/responses`),snap=>{
-      const count=snap.exists()?Object.keys(snap.val()).length:0;
-      document.getElementById('share-count').textContent=`${count} response${count!==1?'s':''}`;
-    });
+// TIMER
+function startTimer(elId, duration, startedAt, isHostTimer) {
+  clearInterval(gameTimer);
+  function tick() {
+    const elapsed = Math.floor((Date.now()-startedAt)/1000);
+    const left = Math.max(0, duration-elapsed);
+    const m = Math.floor(left/60), s = left%60;
+    const el = document.getElementById(elId);
+    if(el) el.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+    if(el) el.style.color = left<60?'#ff4444':left<180?'var(--accent2)':'var(--accent)';
+    if(left<=0){ clearInterval(gameTimer); if(isHostTimer) endGame(); }
   }
+  tick();
+  gameTimer = setInterval(tick, 1000);
+}
  
-  window.copyCode=()=>{
-    navigator.clipboard.writeText(currentRoomCode||'');
-    const btn=document.getElementById('copy-code-btn');
-    btn.textContent='✓ Copied!'; btn.classList.add('copied');
-    setTimeout(()=>{btn.textContent='Copy Code';btn.classList.remove('copied');},2000);
+window.endGame = async () => {
+  clearInterval(gameTimer);
+  await update(ref(db,`rooms/${roomCode}`), { status:'ended', endedAt:Date.now() });
+  const snap = await get(ref(db,`rooms/${roomCode}`));
+  showGameOver(snap.val());
+};
+ 
+// LEADERBOARD
+function listenLB(elId, showPhotos) {
+  onValue(ref(db,`rooms/${roomCode}/players`), snap => {
+    if(!snap.exists()) return;
+    const players = snap.val();
+    const sorted = Object.entries(players)
+      .map(([id,p]) => ({ id, name:p.name, score:Object.keys(p.photos||{}).length, photos:p.photos||{} }))
+      .sort((a,b)=>b.score-a.score);
+    const medals=['🥇','🥈','🥉'];
+    const el = document.getElementById(elId);
+    if(!el) return;
+    if(!sorted.length){ el.innerHTML='<div style="color:var(--muted);text-align:center;padding:.75rem;font-size:.85rem">No scores yet</div>'; return; }
+    el.innerHTML = sorted.map((p,i)=>`
+      <div class="lb-row ${i===0?'top1':i===1?'top2':i===2?'top3':''}" style="animation-delay:${i*.04}s">
+        <div class="lb-rank">${medals[i]||i+1}</div>
+        <div class="lb-name">${esc(p.name)}${p.id===myPid?' <span style="color:var(--accent);font-size:.7rem">(you)</span>':''}</div>
+        ${showPhotos?`<div style="display:flex;gap:.3rem;flex-wrap:wrap">${Object.values(p.photos).slice(0,4).map(ph=>ph.img?`<img class="lb-thumb" src="${ph.img}" alt="">`:'').join('')}</div>`:''}
+        <div class="lb-score">${p.score} 📸</div>
+      </div>`).join('');
+  });
+}
+ 
+// FOUND PHOTO
+window.openFoundOverlay = async () => {
+  const snap = await get(ref(db,`rooms/${roomCode}/players/${myPid}/photos/${myTargetId}`));
+  if(snap.exists()){ showToast('Already found this person!'); return; }
+  foundPhoto=null;
+  document.getElementById('found-photo').style.display='none';
+  document.getElementById('found-video').style.display='block';
+  document.getElementById('found-retake').style.display='none';
+  document.getElementById('found-overlay').classList.remove('hidden');
+  try {
+    foundCamStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});
+    document.getElementById('found-video').srcObject = foundCamStream;
+  } catch(e){ console.log('cam err',e); }
+};
+window.foundSnap = () => {
+  const v=document.getElementById('found-video');
+  const c=document.createElement('canvas');
+  c.width=v.videoWidth||640; c.height=v.videoHeight||480;
+  const ctx=c.getContext('2d');
+  ctx.save(); ctx.scale(-1,1); ctx.drawImage(v,-c.width,0,c.width,c.height); ctx.restore();
+  foundPhoto=c.toDataURL('image/jpeg',.6);
+  document.getElementById('found-photo').src=foundPhoto;
+  document.getElementById('found-photo').style.display='block';
+  document.getElementById('found-video').style.display='none';
+  document.getElementById('found-retake').style.display='block';
+  if(foundCamStream) foundCamStream.getTracks().forEach(t=>t.stop());
+  showToast('Photo taken! 📸');
+};
+window.foundRetake = () => {
+  foundPhoto=null;
+  document.getElementById('found-photo').style.display='none';
+  document.getElementById('found-video').style.display='block';
+  document.getElementById('found-retake').style.display='none';
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false}).then(s=>{
+    foundCamStream=s; document.getElementById('found-video').srcObject=s;
+  }).catch(e=>console.log(e));
+};
+window.foundFileUpload = (e) => {
+  const file=e.target.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    foundPhoto=ev.target.result;
+    document.getElementById('found-photo').src=foundPhoto;
+    document.getElementById('found-photo').style.display='block';
+    document.getElementById('found-video').style.display='none';
+    document.getElementById('found-retake').style.display='block';
+    if(foundCamStream) foundCamStream.getTracks().forEach(t=>t.stop());
+    showToast('Photo uploaded ✅');
   };
+  r.readAsDataURL(file);
+};
+window.closeFoundOverlay = () => {
+  document.getElementById('found-overlay').classList.add('hidden');
+  if(foundCamStream) foundCamStream.getTracks().forEach(t=>t.stop());
+};
+window.submitFound = async () => {
+  if(!foundPhoto){ showToast('Take a photo first!','err'); return; }
+  const btn=document.getElementById('submit-found-btn');
+  btn.disabled=true; btn.textContent='Saving...';
+  await set(ref(db,`rooms/${roomCode}/players/${myPid}/photos/${myTargetId}`), { img:foundPhoto, ts:Date.now() });
+  btn.disabled=false; btn.textContent='Submit ✓';
+  closeFoundOverlay();
+  document.getElementById('hunt-found-msg').style.display='block';
+  document.getElementById('found-btn').style.display='none';
+  showToast('🎉 +1 point!');
+  // Next target
+  setTimeout(async () => {
+    const snap = await get(ref(db,`rooms/${roomCode}`));
+    const room = snap.val();
+    const players = room.players||{};
+    const myPhotos = players[myPid]?.photos||{};
+    const already = new Set([...Object.keys(myPhotos), myPid]);
+    const remaining = Object.keys(players).filter(id=>!already.has(id));
+    if(!remaining.length){
+      document.getElementById('hunt-found-msg').innerHTML='<div style="font-family:\'Syne\',sans-serif;font-weight:700;color:var(--success)">🏆 You found everyone!</div>';
+      document.getElementById('hunt-found-msg').style.display='block';
+      return;
+    }
+    myTargetId = remaining[Math.floor(Math.random()*remaining.length)];
+    setTarget(players, myTargetId);
+    document.getElementById('hunt-found-msg').style.display='none';
+    document.getElementById('found-btn').style.display='block';
+    showToast('🎯 New target!');
+  }, 1200);
+};
  
-  window.copyLink=()=>{
-    const code=currentRoomCode||new URLSearchParams(location.search).get('room');
-    navigator.clipboard.writeText(roomURL(code));
-    showToast('Link copied!');
-  };
+// GAME OVER
+function showGameOver(room) {
+  clearInterval(gameTimer);
+  const players = room.players||{};
+  const sorted = Object.entries(players)
+    .map(([id,p])=>({ id, name:p.name, score:Object.keys(p.photos||{}).length }))
+    .sort((a,b)=>b.score-a.score);
+  const medals=['🥇','🥈','🥉'];
+  // Podium
+  const top3=sorted.slice(0,3);
+  const order=top3.length>=3?[top3[1],top3[0],top3[2]]:top3.length===2?[top3[1],top3[0]]:[top3[0]];
+  const bc=['p2','p1','p3'], em=['🥈','🥇','🥉'];
+  document.getElementById('podium').innerHTML=order.map((p,i)=>p?`
+    <div class="podium-slot">
+      <div class="podium-name">${esc(p.name)}</div>
+      <div class="podium-score">${p.score} 📸</div>
+      <div class="podium-bar ${bc[i]}">${em[i]}</div>
+    </div>`:'' ).join('');
+  document.getElementById('final-lb').innerHTML=sorted.map((p,i)=>`
+    <div class="lb-row ${i===0?'top1':i===1?'top2':i===2?'top3':''}">
+      <div class="lb-rank">${medals[i]||i+1}</div>
+      <div class="lb-name">${esc(p.name)}</div>
+      <div class="lb-score">${p.score} 📸</div>
+    </div>`).join('');
+  showPage('pg-gameover');
+}
  
-  window.joinRoom=async()=>{
-    const code=document.getElementById('join-input').value.trim().toUpperCase();
-    if(!code){showToast('Enter a room code','err');return;}
-    await loadParticipantView(code);
-  };
- 
-  async function loadParticipantView(code){
-    const snap=await get(ref(db,`rooms/${code}`));
-    if(!snap.exists()){showToast('Room not found — check the code','err');return;}
-    const room=snap.val();
-    currentRoomCode=code; capturedSelfie=null;
-    document.getElementById('p-room-pill').textContent=`● ${room.name}`;
-    [0,1,2,3].forEach(i=>{
-      document.getElementById(`ps${i}`).classList.remove('show');
-      const d=document.getElementById(`s${i}`); d.className='step'+(i===0?' active':'');
-    });
-    document.getElementById('ps0').classList.add('show');
-    ['p-name','p-food','p-fact','p-weekend'].forEach(id=>document.getElementById(id).value='');
-    updateURL(code); showPage('participant');
-    setTimeout(startCam,400);
-  }
- 
-  window.nextStep=(from)=>{
-    const ids=['p-name','p-food','p-fact','p-weekend'];
-    if(!document.getElementById(ids[from]).value.trim()){showToast('Fill this in first 😊','err');return;}
-    document.getElementById(`ps${from}`).classList.remove('show');
-    document.getElementById(`ps${from+1}`).classList.add('show');
-    [0,1,2,3].forEach(i=>{
-      const d=document.getElementById(`s${i}`);
-      d.className='step'+(i<from+1?' done':i===from+1?' active':'');
-    });
-  };
- 
-  async function startCam(){
-    try{
-      camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});
-      const v=document.getElementById('cam-video');
-      v.srcObject=camStream; v.style.display='block';
-      document.getElementById('selfie-img').style.display='none';
-      document.getElementById('shutter-btn').style.display='block';
-      document.getElementById('retake-btn').style.display='none';
-    }catch(e){console.log('Camera error',e);}
-  }
- 
-  window.snap=()=>{
-    const v=document.getElementById('cam-video');
-    const c=document.createElement('canvas');
-    c.width=v.videoWidth||640; c.height=v.videoHeight||480;
-    const ctx=c.getContext('2d');
-    ctx.save(); ctx.scale(-1,1); ctx.drawImage(v,-c.width,0,c.width,c.height); ctx.restore();
-    capturedSelfie=c.toDataURL('image/jpeg',.7);
-    const img=document.getElementById('selfie-img');
-    img.src=capturedSelfie; img.style.display='block';
-    document.getElementById('cam-video').style.display='none';
-    document.getElementById('shutter-btn').style.display='none';
-    document.getElementById('retake-btn').style.display='block';
-    if(camStream)camStream.getTracks().forEach(t=>t.stop());
-    showToast('Selfie captured! 📸');
-  };
- 
-  window.retake=()=>{ capturedSelfie=null; document.getElementById('selfie-img').style.display='none'; startCam(); };
- 
-  window.fileUpload=(e)=>{
-    const file=e.target.files[0]; if(!file)return;
-    const r=new FileReader();
-    r.onload=ev=>{
-      capturedSelfie=ev.target.result;
-      const img=document.getElementById('selfie-img');
-      img.src=capturedSelfie; img.style.display='block';
-      document.getElementById('cam-video').style.display='none';
-      document.getElementById('shutter-btn').style.display='none';
-      document.getElementById('retake-btn').style.display='block';
-      if(camStream)camStream.getTracks().forEach(t=>t.stop());
-      showToast('Photo uploaded ✅');
-    };
-    r.readAsDataURL(file);
-  };
- 
-  window.submitResponse=async()=>{
-    const weekend=document.getElementById('p-weekend').value.trim();
-    if(!weekend){showToast('Tell us your weekend vibe!','err');return;}
-    const btn=document.getElementById('submit-btn');
-    btn.disabled=true; btn.textContent='Submitting...';
-    await push(ref(db,`rooms/${currentRoomCode}/responses`),{
-      name:document.getElementById('p-name').value.trim(),
-      food:document.getElementById('p-food').value.trim(),
-      fact:document.getElementById('p-fact').value.trim(),
-      weekend, selfie:capturedSelfie||null, ts:Date.now()
-    });
-    btn.disabled=false; btn.textContent='Submit →';
-    if(camStream)camStream.getTracks().forEach(t=>t.stop());
-    showPage('success');
-  };
- 
-  window.showGallery=()=>{
-    if(!currentRoomCode)return;
-    get(ref(db,`rooms/${currentRoomCode}`)).then(snap=>{
-      if(!snap.exists())return;
-      const room=snap.val();
-      document.getElementById('g-room-name').textContent=room.name;
-      document.getElementById('g-code').textContent=`Code: ${currentRoomCode} · Hosted by ${room.host}`;
-    });
-    if(galleryUnsub)galleryUnsub();
-    galleryUnsub=onValue(ref(db,`rooms/${currentRoomCode}/responses`),snap=>{
-      const responses=snap.exists()?Object.values(snap.val()):[];
-      responses.sort((a,b)=>a.ts-b.ts);
-      const count=responses.length;
-      document.getElementById('g-count').textContent=`${count} response${count!==1?'s':''}`;
-      const grid=document.getElementById('people-grid');
-      if(!count){
-        grid.innerHTML='<div class="empty"><div class="empty-icon">🪑</div><p>No one\'s joined yet.<br>Share the code to get people in.</p></div>';
-        return;
-      }
-      grid.innerHTML=responses.map((r,i)=>`
-        <div class="person-card" style="animation-delay:${i*.04}s">
-          ${r.selfie?`<img class="person-photo" src="${r.selfie}" alt="${esc(r.name)}">`:'<div class="no-photo">👤</div>'}
-          <div class="person-info">
-            <div class="person-name">${esc(r.name)}</div>
-            <div class="fact"><span>🍜</span><span>${esc(r.food)}</span></div>
-            <div class="fact"><span>🎉</span><span>${esc(r.fact)}</span></div>
-            <div class="fact"><span>☀️</span><span>${esc(r.weekend)}</span></div>
-          </div>
-        </div>`).join('');
-    });
-    showPage('gallery');
-  };
- 
-  async function init(){
-    const code=new URLSearchParams(location.search).get('room');
-    if(code){ await loadParticipantView(code.toUpperCase()); }
-    else { showPage('home'); }
-  }
-  init();
+// INIT
+async function init() {
+  const code = new URLSearchParams(location.search).get('room');
+  if(code){ await loadRoom(code.toUpperCase()); }
+  else { showPage('pg-home'); }
+}
+init();
 </script>
 </body>
 </html>
+ 
