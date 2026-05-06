@@ -14,31 +14,32 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .orb-2{width:400px;height:400px;background:rgba(255,179,71,.06);bottom:-100px;left:-100px}
 .page{display:none;min-height:100vh;position:relative;z-index:1;padding:1.5rem}
 .page.active{display:flex;flex-direction:column;align-items:center;justify-content:center}
-.page.top{justify-content:flex-start}
+.page.top{justify-content:flex-start;padding-top:2rem}
 .logo{font-family:'Syne',sans-serif;font-size:.75rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:.5rem;justify-content:center;margin-bottom:2rem}
 .logo::before,.logo::after{content:'';width:24px;height:1px;background:var(--accent);opacity:.5}
-h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:.3rem}
-.sub{color:var(--muted);font-size:.9rem;line-height:1.6;margin-bottom:1.5rem}
 .btn{cursor:pointer;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;border-radius:6px;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:.4rem}
 .btn-primary{background:var(--accent);color:white;padding:.9rem 2rem}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(255,92,53,.3)}
+.btn-primary:active{transform:translateY(0)}
 .btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);padding:.8rem 1.5rem;font-family:'DM Sans',sans-serif;font-weight:500}
 .btn-ghost:hover{border-color:var(--muted);color:var(--text)}
 .btn-success{background:var(--success);color:#000;padding:.9rem 2rem}
+.btn-danger{background:#ff4444;color:white;padding:.9rem 2rem}
 .btn-full{width:100%}
 .btn-lg{padding:1.1rem 2.5rem;font-size:1rem}
-.btn-sm{padding:.5rem 1rem;font-size:.75rem}
+.btn-sm{padding:.45rem .9rem;font-size:.75rem}
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:2rem;width:100%;position:relative}
 .card-sm{max-width:460px}
 .fg{margin-bottom:1.1rem}
 .fg label{display:block;font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
-.fg input,.fg textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.8rem 1rem;font-family:'DM Sans',sans-serif;font-size:.95rem;border-radius:8px;outline:none;transition:border-color .2s;resize:none}
-.fg input:focus,.fg textarea:focus{border-color:var(--accent)}
-.fg input::placeholder,.fg textarea::placeholder{color:var(--muted)}
+.fg input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.8rem 1rem;font-family:'DM Sans',sans-serif;font-size:.95rem;border-radius:8px;outline:none;transition:border-color .2s}
+.fg input:focus{border-color:var(--accent)}
+.fg input::placeholder{color:var(--muted)}
 .pill{display:inline-flex;align-items:center;gap:.35rem;border-radius:100px;padding:.3rem .8rem;font-size:.72rem;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.05em}
 .pill-accent{background:rgba(255,92,53,.1);border:1px solid rgba(255,92,53,.2);color:var(--accent)}
 .pill-success{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);color:var(--success)}
+.pill-warn{background:rgba(255,179,71,.1);border:1px solid rgba(255,179,71,.2);color:var(--accent2)}
 .pulse{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
 .steps{display:flex;gap:.35rem;margin-bottom:1.5rem}
@@ -47,16 +48,16 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
 .step.done{background:var(--success)}
 .pstep{display:none}.pstep.show{display:block}
 .hunt-card{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(255,92,53,.3);border-radius:16px;padding:1.75rem;text-align:center;margin-bottom:1.25rem;position:relative;overflow:hidden}
-.hunt-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(255,92,53,.08),transparent 60%)}
+.hunt-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(255,92,53,.08),transparent 60%);pointer-events:none}
 .hunt-card .mystery{font-size:2.5rem;margin-bottom:.75rem}
-.hunt-card h3{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+.hunt-card h3{font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
 .clue-list{display:flex;flex-direction:column;gap:.6rem}
 .clue{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:.7rem 1rem;display:flex;align-items:flex-start;gap:.75rem;text-align:left}
 .clue .emoji{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
-.clue-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.15rem}
-.clue-text{font-size:.88rem;color:var(--text);line-height:1.4}
+.clue-label{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.12rem}
+.clue-text{font-size:.9rem;color:var(--text);line-height:1.4;font-weight:500}
 .timer-wrap{display:flex;align-items:center;gap:.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.5rem .9rem}
-.timer-num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--accent)}
+.timer-num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--accent);transition:color .5s}
 .cam-wrap{position:relative;width:100%;aspect-ratio:1;background:#000;border-radius:12px;overflow:hidden;border:2px solid var(--border);margin-bottom:.75rem}
 .cam-wrap video,.cam-wrap img{width:100%;height:100%;object-fit:cover;display:block}
 .cam-controls{position:absolute;bottom:0;left:0;right:0;padding:1rem;background:linear-gradient(transparent,rgba(0,0,0,.8));display:flex;align-items:center;justify-content:center;gap:1rem}
@@ -66,40 +67,51 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
 .file-alt{text-align:center;margin-top:.35rem}
 .file-alt label{color:var(--muted);font-size:.75rem;cursor:pointer;text-decoration:underline}
 .file-alt input{display:none}
+.upload-progress{height:4px;background:var(--border);border-radius:2px;margin-top:.5rem;overflow:hidden;display:none}
+.upload-progress-bar{height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width .3s}
 .lb-row{display:flex;align-items:center;gap:.75rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem;margin-bottom:.5rem;animation:rowIn .3s ease both}
 @keyframes rowIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
-.lb-row.top1{border-color:rgba(255,215,0,.3);background:rgba(255,215,0,.04)}
+.lb-row.top1{border-color:rgba(255,215,0,.35);background:rgba(255,215,0,.04)}
 .lb-row.top2{border-color:rgba(192,192,192,.3)}
 .lb-row.top3{border-color:rgba(205,127,50,.3)}
 .lb-rank{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;width:26px;text-align:center;flex-shrink:0}
-.lb-name{flex:1;font-size:.9rem}
-.lb-score{font-family:'Syne',sans-serif;font-weight:800;color:var(--accent)}
+.lb-name{flex:1;font-size:.9rem;font-weight:500}
+.lb-score{font-family:'Syne',sans-serif;font-weight:800;color:var(--accent);white-space:nowrap}
+.lb-thumbs{display:flex;gap:.3rem;flex-wrap:wrap}
 .lb-thumb{width:32px;height:32px;border-radius:5px;object-fit:cover;border:1px solid var(--border)}
 .waiting-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.6rem;width:100%;max-width:580px;margin-bottom:1.5rem}
 .waiting-chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.55rem .8rem;font-size:.8rem;display:flex;align-items:center;gap:.4rem;animation:chipIn .3s ease both}
 @keyframes chipIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
-.code-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;margin:1rem 0;display:flex;align-items:center;justify-content:space-between;gap:1rem;width:100%;max-width:580px}
+.code-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;margin:.75rem 0;display:flex;align-items:center;justify-content:space-between;gap:1rem;width:100%;max-width:580px}
 .room-code{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;letter-spacing:.2em;color:var(--accent)}
 .copy-btn{background:var(--border);border:none;color:var(--text);padding:.45rem .9rem;border-radius:4px;cursor:pointer;font-size:.75rem;font-family:'DM Sans';transition:all .2s;white-space:nowrap}
 .copy-btn:hover{background:var(--accent)}.copy-btn.copied{background:var(--success);color:#000}
-.found-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:flex;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(8px)}
+.found-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:500;display:flex;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(10px)}
 .found-overlay.hidden{display:none}
 .found-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.75rem;width:100%;max-width:400px}
-.podium{display:flex;align-items:flex-end;justify-content:center;gap:.75rem;margin:1.5rem 0}
-.podium-slot{display:flex;flex-direction:column;align-items:center;gap:.4rem}
-.podium-bar{border-radius:8px 8px 0 0;width:75px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+.host-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;width:100%;max-width:580px;flex-wrap:wrap;margin-bottom:.75rem}
+ 
+/* COLLAGE WALL */
+.collage-grid{columns:2;gap:.75rem;width:100%;max-width:700px}
+@media(min-width:600px){.collage-grid{columns:3}}
+@media(min-width:900px){.collage-grid{columns:4}}
+.collage-item{break-inside:avoid;margin-bottom:.75rem;position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--surface)}
+.collage-item img{width:100%;display:block;object-fit:cover}
+.collage-caption{position:absolute;bottom:0;left:0;right:0;padding:.5rem .6rem;background:linear-gradient(transparent,rgba(0,0,0,.8));font-size:.72rem;color:white;font-weight:500}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:.75rem;margin:1.25rem 0}
+.podium-slot{display:flex;flex-direction:column;align-items:center;gap:.35rem}
+.podium-bar{border-radius:8px 8px 0 0;width:75px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
 .podium-bar.p1{height:90px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4)}
 .podium-bar.p2{height:65px;background:rgba(192,192,192,.12);border:1px solid rgba(192,192,192,.3)}
 .podium-bar.p3{height:48px;background:rgba(205,127,50,.12);border:1px solid rgba(205,127,50,.3)}
-.podium-name{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;text-align:center;max-width:75px;word-break:break-word}
-.podium-score{font-size:.8rem;color:var(--accent);font-weight:700}
-#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(120px);background:var(--success);color:#000;padding:.7rem 1.4rem;border-radius:100px;font-weight:500;font-size:.85rem;z-index:9999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none}
+.podium-name{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;text-align:center;max-width:75px;word-break:break-word}
+.podium-score{font-size:.78rem;color:var(--accent);font-weight:700}
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(120px);background:var(--success);color:#000;padding:.7rem 1.4rem;border-radius:100px;font-weight:500;font-size:.85rem;z-index:9999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none;max-width:90vw;text-align:center}
 #toast.show{transform:translateX(-50%) translateY(0)}
 #toast.err{background:#ff4444;color:white}
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .gap-row{display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center}
-.host-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;width:100%;max-width:580px;flex-wrap:wrap;margin-bottom:1rem}
 @media(max-width:480px){.card{padding:1.5rem}.room-code{font-size:1.4rem}}
 </style>
 </head>
@@ -111,18 +123,19 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
 <div class="found-overlay hidden" id="found-overlay">
   <div class="found-card">
     <div style="text-align:center;margin-bottom:1rem">
-      <div style="font-size:2rem;margin-bottom:.4rem">📸</div>
-      <h2 class="title" style="font-size:1.2rem;margin-bottom:.2rem">Found them!</h2>
+      <div style="font-size:2rem;margin-bottom:.35rem">📸</div>
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:.2rem">Found them!</h2>
       <p style="color:var(--muted);font-size:.85rem">Take a selfie with <strong id="found-name" style="color:var(--accent)"></strong>!</p>
     </div>
     <div class="cam-wrap">
       <video id="found-video" autoplay playsinline muted></video>
-      <img id="found-photo" style="display:none" alt="capture">
+      <img id="found-photo-preview" style="display:none" alt="">
       <div class="cam-controls">
         <button class="retake-btn" id="found-retake" onclick="foundRetake()">↩ Retake</button>
         <button class="shutter" onclick="foundSnap()"></button>
       </div>
     </div>
+    <div class="upload-progress" id="upload-progress"><div class="upload-progress-bar" id="upload-bar"></div></div>
     <div class="file-alt"><label for="found-upload">Upload photo instead</label><input type="file" id="found-upload" accept="image/*" onchange="foundFileUpload(event)"></div>
     <div style="display:flex;gap:.6rem;margin-top:.9rem">
       <button class="btn btn-ghost btn-full" onclick="closeFoundOverlay()">Cancel</button>
@@ -141,7 +154,7 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
 <div class="page" id="pg-home">
   <div class="logo">RoomBreaker</div>
   <h1 style="font-family:'Syne',sans-serif;font-size:clamp(2.5rem,7vw,4.5rem);font-weight:800;line-height:.95;letter-spacing:-.03em;margin-bottom:1rem;text-align:center">Find your<br><span style="color:var(--accent)">people.</span></h1>
-  <p style="color:var(--muted);font-size:.95rem;max-width:300px;text-align:center;line-height:1.6;margin-bottom:2rem">Answer 4 questions, get a mystery card, hunt down the match!</p>
+  <p style="color:var(--muted);font-size:.95rem;max-width:300px;text-align:center;line-height:1.6;margin-bottom:2rem">Answer 3 questions, get a mystery card, hunt down the match! 🎯</p>
   <div class="gap-row" style="margin-bottom:2rem">
     <button class="btn btn-primary btn-lg" onclick="showPage('pg-create')">Create Room</button>
   </div>
@@ -160,8 +173,8 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
 <div class="page" id="pg-create">
   <div class="card card-sm">
     <button onclick="showPage('pg-home')" style="position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem">✕</button>
-    <h2 class="title">Create a Room</h2>
-    <p class="sub">Set up your scavenger hunt for up to 25 players.</p>
+    <h2 style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:.3rem">Create a Room</h2>
+    <p style="color:var(--muted);font-size:.88rem;margin-bottom:1.5rem">Set up your scavenger hunt for up to 25 players.</p>
     <div class="fg"><label>Room Name</label><input id="room-name" type="text" placeholder="e.g. Oslo Design Summit" maxlength="40"></div>
     <div class="fg"><label>Your Name (Host)</label><input id="host-name" type="text" placeholder="e.g. Hari" maxlength="30"></div>
     <button class="btn btn-primary btn-full" style="margin-top:.75rem" id="create-btn" onclick="createRoom()">Create Room →</button>
@@ -169,8 +182,8 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
 </div>
  
 <!-- HOST LOBBY -->
-<div class="page top" id="pg-host-lobby" style="padding-top:2rem">
-  <div class="logo" style="margin-bottom:1rem">RoomBreaker</div>
+<div class="page top" id="pg-host-lobby">
+  <div class="logo" style="margin-bottom:.75rem">RoomBreaker</div>
   <div class="host-bar">
     <div>
       <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem" id="hl-name">Room</div>
@@ -185,19 +198,19 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
     <div class="room-code" id="hl-code">------</div>
     <button class="copy-btn" id="hl-copy-code" onclick="hostCopyCode()">Copy Code</button>
   </div>
-  <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem;text-align:center">Waiting for players to answer questions...</p>
+  <p style="color:var(--muted);font-size:.83rem;margin-bottom:1rem;text-align:center">Share the code — waiting for players to answer questions...</p>
   <div class="waiting-grid" id="waiting-grid"></div>
   <button class="btn btn-primary btn-lg" id="start-btn" onclick="startGame()" disabled>Start Game 🎮</button>
-  <p style="color:var(--muted);font-size:.72rem;margin-top:.5rem">Need at least 2 players to start</p>
+  <p style="color:var(--muted);font-size:.72rem;margin-top:.4rem">Need at least 2 players to start</p>
 </div>
  
 <!-- PARTICIPANT FORM -->
 <div class="page" id="pg-form">
   <div class="card card-sm">
     <div class="pill pill-accent" id="form-pill" style="margin-bottom:1.25rem">● ROOM</div>
-    <h2 class="title">Introduce yourself! 👋</h2>
-    <p class="sub">You'll become a mystery card someone has to find.</p>
-    <div class="steps"><div class="step active" id="fs0"></div><div class="step" id="fs1"></div><div class="step" id="fs2"></div><div class="step" id="fs3"></div></div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:.3rem">Introduce yourself! 👋</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1.25rem">You'll become a mystery card someone has to find.</p>
+    <div class="steps"><div class="step active" id="fs0"></div><div class="step" id="fs1"></div><div class="step" id="fs2"></div></div>
     <div class="pstep show" id="fp0">
       <div class="fg"><label>Your Name</label><input id="p-name" type="text" placeholder="What do people call you?" maxlength="30"></div>
       <button class="btn btn-primary btn-full" style="margin-top:.5rem" onclick="formNext(0)">Next →</button>
@@ -207,11 +220,7 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
       <button class="btn btn-primary btn-full" style="margin-top:.5rem" onclick="formNext(1)">Next →</button>
     </div>
     <div class="pstep" id="fp2">
-      <div class="fg"><label>🎉 A Fun Fact About You</label><textarea id="p-fact" rows="3" placeholder="Something that would surprise people..." maxlength="150"></textarea></div>
-      <button class="btn btn-primary btn-full" style="margin-top:.5rem" onclick="formNext(2)">Next →</button>
-    </div>
-    <div class="pstep" id="fp3">
-      <div class="fg"><label>☀️ One thing you love on weekends?</label><input id="p-weekend" type="text" placeholder="e.g. hiking, making coffee, gaming..." maxlength="80"></div>
+      <div class="fg"><label>✈️ Dream Travel Destination</label><input id="p-travel" type="text" placeholder="If you could go anywhere..." maxlength="60"></div>
       <button class="btn btn-primary btn-full" style="margin-top:.5rem" id="form-submit-btn" onclick="submitForm()">Submit Answers →</button>
     </div>
   </div>
@@ -221,8 +230,8 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
 <div class="page" id="pg-waiting">
   <div style="text-align:center;max-width:320px">
     <div style="font-size:3rem;margin-bottom:1rem">⏳</div>
-    <h2 class="title">You're in!</h2>
-    <p class="sub" style="text-align:center">Waiting for the host to start the game...<br>Get ready to hunt! 🎯</p>
+    <h2 style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:.5rem">You're in!</h2>
+    <p style="color:var(--muted);line-height:1.6;text-align:center;margin-bottom:1.25rem">Waiting for the host to start...<br>Get ready to hunt! 🎯</p>
     <div class="pill pill-success" style="margin:0 auto"><div class="pulse"></div><span id="waiting-count">0 ready</span></div>
   </div>
 </div>
@@ -232,7 +241,7 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
   <div style="width:100%;max-width:440px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
       <div class="pill pill-accent" id="hunt-pill">● ROOM</div>
-      <div class="timer-wrap"><span style="font-size:.8rem;margin-right:.25rem">⏱</span><span class="timer-num" id="p-timer">15:00</span></div>
+      <div class="timer-wrap"><span style="font-size:.85rem;margin-right:.2rem">⏱</span><span class="timer-num" id="p-timer">15:00</span></div>
       <div class="pill pill-success"><div class="pulse"></div><span id="hunt-score">0 found</span></div>
     </div>
     <div class="hunt-card">
@@ -240,8 +249,7 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
       <h3>Find this person</h3>
       <div class="clue-list">
         <div class="clue"><span class="emoji">🍜</span><div><div class="clue-label">Favourite Food</div><div class="clue-text" id="clue-food">—</div></div></div>
-        <div class="clue"><span class="emoji">🎉</span><div><div class="clue-label">Fun Fact</div><div class="clue-text" id="clue-fact">—</div></div></div>
-        <div class="clue"><span class="emoji">☀️</span><div><div class="clue-label">Loves on weekends</div><div class="clue-text" id="clue-weekend">—</div></div></div>
+        <div class="clue"><span class="emoji">✈️</span><div><div class="clue-label">Dream Travel Destination</div><div class="clue-text" id="clue-travel">—</div></div></div>
       </div>
     </div>
     <div id="hunt-found-msg" style="display:none;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:10px;padding:.9rem;text-align:center;margin-bottom:.9rem">
@@ -256,7 +264,7 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
 </div>
  
 <!-- HOST GAME VIEW -->
-<div class="page top" id="pg-host-game" style="padding-top:1.5rem">
+<div class="page top" id="pg-host-game">
   <div style="width:100%;max-width:600px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem">
       <div>
@@ -264,8 +272,8 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
         <div style="color:var(--muted);font-size:.78rem">Host View</div>
       </div>
       <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
-        <div class="timer-wrap"><span style="font-size:.8rem;margin-right:.25rem">⏱</span><span class="timer-num" id="h-timer">15:00</span></div>
-        <button class="btn btn-ghost btn-sm" onclick="endGame()">End Game</button>
+        <div class="timer-wrap"><span style="font-size:.85rem;margin-right:.2rem">⏱</span><span class="timer-num" id="h-timer">15:00</span></div>
+        <button class="btn btn-danger btn-sm" onclick="endGame()">End Game</button>
       </div>
     </div>
     <div style="font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">🏆 Live Leaderboard</div>
@@ -273,21 +281,32 @@ h2.title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-b
   </div>
 </div>
  
-<!-- GAME OVER -->
-<div class="page" id="pg-gameover">
-  <div style="width:100%;max-width:520px;text-align:center">
+<!-- GAME OVER / COLLAGE -->
+<div class="page top" id="pg-gameover">
+  <div style="width:100%;max-width:720px;text-align:center;padding-bottom:3rem">
     <div style="font-size:2.5rem;margin-bottom:.5rem">🎉</div>
-    <h2 class="title" style="font-size:2rem;margin-bottom:.2rem">Time's Up!</h2>
-    <p class="sub" style="text-align:center">Here's how everyone did</p>
+    <h2 style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;margin-bottom:.25rem">Time's Up!</h2>
+    <p style="color:var(--muted);margin-bottom:1.5rem">Here's how everyone did</p>
     <div class="podium" id="podium"></div>
-    <div id="final-lb" style="margin-bottom:1.5rem;text-align:left"></div>
-    <button class="btn btn-primary" onclick="showPage('pg-home')">Back to Home</button>
+    <div id="final-lb" style="margin-bottom:2rem;text-align:left;max-width:500px;margin-left:auto;margin-right:auto"></div>
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem">
+      <div style="flex:1;height:1px;background:var(--border)"></div>
+      <span style="font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">📸 Photo Wall</span>
+      <div style="flex:1;height:1px;background:var(--border)"></div>
+    </div>
+    <div class="collage-grid" id="collage-grid">
+      <div style="color:var(--muted);font-size:.85rem;padding:2rem;text-align:center;grid-column:1/-1">Loading photos...</div>
+    </div>
+    <div style="margin-top:2rem">
+      <button class="btn btn-primary btn-lg" id="download-btn" onclick="downloadZip()">⬇️ Download All Photos</button>
+    </div>
   </div>
 </div>
  
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, push, update, onValue, off, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getStorage, ref as sRef, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
  
 const firebaseConfig = {
   apiKey: "AIzaSyBtfOQOyYawigdWkRUuBg1OrknDKFVtPBQ",
@@ -301,29 +320,38 @@ const firebaseConfig = {
  
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const storage = getStorage(app);
  
-let roomCode = null, myPid = null, myTargetId = null, isHost = false;
-let gameTimer = null, foundCamStream = null, foundPhoto = null;
+// ── State ────────────────────────────────────────────────────
+let roomCode = null, myPid = null, myTargetId = null;
+let gameTimer = null, foundCamStream = null, foundPhotoData = null;
+let allPhotosForDownload = [];
  
+// ── Helpers ───────────────────────────────────────────────────
 function genCode(){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; return Array.from({length:6},()=>c[Math.floor(Math.random()*c.length)]).join(''); }
-function genId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function roomURL(c){ return `${location.origin}${location.pathname}?room=${c}`; }
  
 let toastT;
 window.showToast = (msg, err=false) => {
   const el = document.getElementById('toast');
-  el.textContent = msg; el.className = 'show' + (err?' err':'');
-  clearTimeout(toastT); toastT = setTimeout(() => el.className='', 2800);
+  el.textContent = msg; el.className = 'show'+(err?' err':'');
+  clearTimeout(toastT); toastT = setTimeout(()=>el.className='', 2800);
 };
 window.showPage = (name) => {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(name).classList.add('active');
   window.scrollTo(0,0);
 };
-function updateURL(c){ history.replaceState(null,'', c ? `?room=${c}` : location.pathname); }
+function updateURL(c){ history.replaceState(null,'', c?`?room=${c}`:location.pathname); }
  
-// CREATE
+// Session persistence
+function saveSession(code, pid){ localStorage.setItem('rb_session', JSON.stringify({code,pid,ts:Date.now()})); }
+function loadSession(){ try{ return JSON.parse(localStorage.getItem('rb_session')||'null'); }catch(e){ return null; } }
+function clearSession(){ localStorage.removeItem('rb_session'); }
+ 
+// ── Create Room ───────────────────────────────────────────────
 window.createRoom = async () => {
   const name = document.getElementById('room-name').value.trim();
   const host = document.getElementById('host-name').value.trim();
@@ -332,9 +360,9 @@ window.createRoom = async () => {
   const btn = document.getElementById('create-btn');
   btn.disabled=true; btn.textContent='Creating...';
   const code = genCode();
-  await set(ref(db,`rooms/${code}`), { name, host, status:'lobby', created: serverTimestamp(), players:{} });
+  await set(ref(db,`rooms/${code}`), { name, host, status:'lobby', created:serverTimestamp(), players:{} });
   btn.disabled=false; btn.textContent='Create Room →';
-  roomCode=code; isHost=true;
+  roomCode=code;
   updateURL(code);
   document.getElementById('hl-name').textContent = name;
   document.getElementById('hl-host').textContent = `Hosted by ${host}`;
@@ -342,24 +370,25 @@ window.createRoom = async () => {
   showPage('pg-host-lobby');
   listenLobby(code);
 };
+ 
 window.hostCopyLink = () => { navigator.clipboard.writeText(roomURL(roomCode)); showToast('Link copied!'); };
 window.hostCopyCode = () => {
   navigator.clipboard.writeText(roomCode);
   const btn = document.getElementById('hl-copy-code');
   btn.textContent='✓ Copied!'; btn.classList.add('copied');
-  setTimeout(()=>{ btn.textContent='Copy Code'; btn.classList.remove('copied'); }, 2000);
+  setTimeout(()=>{ btn.textContent='Copy Code'; btn.classList.remove('copied'); },2000);
 };
  
-function listenLobby(code) {
+function listenLobby(code){
   onValue(ref(db,`rooms/${code}/players`), snap => {
     const players = snap.exists() ? snap.val() : {};
     const all = Object.values(players);
-    const ready = all.filter(p => p.answered);
+    const ready = all.filter(p=>p.answered);
     document.getElementById('hl-count').textContent = `${all.length} joined`;
     const btn = document.getElementById('start-btn');
     btn.disabled = ready.length < 2;
     btn.textContent = ready.length < 2 ? 'Start Game 🎮' : `Start Game 🎮 (${ready.length} ready)`;
-    document.getElementById('waiting-grid').innerHTML = all.map((p,i) => `
+    document.getElementById('waiting-grid').innerHTML = all.map((p,i)=>`
       <div class="waiting-chip" style="animation-delay:${i*.04}s">
         <div style="width:7px;height:7px;border-radius:50%;background:${p.answered?'var(--success)':'var(--accent2)'};flex-shrink:0"></div>
         <span>${esc(p.name)}</span>${p.answered?'<span style="color:var(--success);font-size:.7rem">✓</span>':''}
@@ -368,70 +397,96 @@ function listenLobby(code) {
   });
 }
  
-// JOIN
+// ── Join Room ─────────────────────────────────────────────────
 window.joinRoom = async () => {
   const code = document.getElementById('join-input').value.trim().toUpperCase();
   if(!code){ showToast('Enter a room code','err'); return; }
   await loadRoom(code);
 };
  
-async function loadRoom(code) {
+async function loadRoom(code, resumePid=null) {
   const snap = await get(ref(db,`rooms/${code}`));
   if(!snap.exists()){ showToast('Room not found','err'); return; }
   const room = snap.val();
-  if(room.status==='playing'){ showToast('Game already started!','err'); return; }
-  if(room.status==='ended'){ showToast('This game has ended','err'); return; }
-  roomCode=code;
-  document.getElementById('form-pill').textContent = `● ${room.name}`;
+  roomCode = code;
   updateURL(code);
+ 
+  // Resume session
+  if(resumePid && room.players && room.players[resumePid]){
+    myPid = resumePid;
+    if(room.status==='playing'){
+      startPlayerHunt(room);
+    } else if(room.status==='ended'){
+      showGameOver(room);
+    } else {
+      showPage('pg-waiting');
+      listenForStart();
+    }
+    return;
+  }
+ 
+  if(room.status==='ended'){ showGameOver(room); return; }
+  if(room.status==='playing'){ showToast('Game already started!','err'); return; }
+  document.getElementById('form-pill').textContent = `● ${room.name}`;
   showPage('pg-form');
+  resetForm();
 }
  
-// FORM
+function resetForm(){
+  ['p-name','p-food','p-travel'].forEach(id=>document.getElementById(id).value='');
+  [0,1,2].forEach(i=>{ document.getElementById(`fp${i}`).classList.remove('show'); document.getElementById(`fs${i}`).className='step'; });
+  document.getElementById('fp0').classList.add('show');
+  document.getElementById('fs0').classList.add('active');
+}
+ 
+// ── Form ──────────────────────────────────────────────────────
 window.formNext = (from) => {
-  const ids=['p-name','p-food','p-fact','p-weekend'];
+  const ids = ['p-name','p-food','p-travel'];
   if(!document.getElementById(ids[from]).value.trim()){ showToast('Fill this in first 😊','err'); return; }
   document.getElementById(`fp${from}`).classList.remove('show');
   document.getElementById(`fp${from+1}`).classList.add('show');
-  [0,1,2,3].forEach(i => {
-    document.getElementById(`fs${i}`).className = 'step'+(i<from+1?' done':i===from+1?' active':'');
+  [0,1,2].forEach(i=>{
+    document.getElementById(`fs${i}`).className='step'+(i<from+1?' done':i===from+1?' active':'');
   });
 };
  
 window.submitForm = async () => {
-  const weekend = document.getElementById('p-weekend').value.trim();
-  if(!weekend){ showToast('Fill this in!','err'); return; }
+  const travel = document.getElementById('p-travel').value.trim();
+  if(!travel){ showToast('Fill this in!','err'); return; }
   const btn = document.getElementById('form-submit-btn');
   btn.disabled=true; btn.textContent='Submitting...';
   const pid = genId();
   myPid = pid;
-  const player = {
+  await set(ref(db,`rooms/${roomCode}/players/${pid}`), {
     name: document.getElementById('p-name').value.trim(),
     food: document.getElementById('p-food').value.trim(),
-    fact: document.getElementById('p-fact').value.trim(),
-    weekend, answered:true, score:0, photos:{}, ts:Date.now()
-  };
-  await set(ref(db,`rooms/${roomCode}/players/${pid}`), player);
+    travel, answered:true, photos:{}, ts:Date.now()
+  });
+  saveSession(roomCode, pid);
   btn.disabled=false; btn.textContent='Submit Answers →';
   showPage('pg-waiting');
-  // Listen for game start
-  onValue(ref(db,`rooms/${roomCode}`), snap => {
+  listenForStart();
+};
+ 
+function listenForStart(){
+  const r = ref(db,`rooms/${roomCode}`);
+  onValue(r, snap => {
     if(!snap.exists()) return;
     const room = snap.val();
     document.getElementById('waiting-count').textContent = `${Object.values(room.players||{}).filter(p=>p.answered).length} ready`;
-    if(room.status==='playing'){ off(ref(db,`rooms/${roomCode}`)); startPlayerHunt(room); }
-    if(room.status==='ended'){ off(ref(db,`rooms/${roomCode}`)); showGameOver(room); }
+    if(room.status==='playing'){ off(r); startPlayerHunt(room); }
+    if(room.status==='ended'){ off(r); showGameOver(room); }
   });
-};
+}
  
-// START GAME (HOST)
+// ── Start Game (Host) ─────────────────────────────────────────
 window.startGame = async () => {
   const snap = await get(ref(db,`rooms/${roomCode}`));
   const room = snap.val();
   const pids = Object.keys(room.players||{});
   const shuffled = [...pids].sort(()=>Math.random()-.5);
   const assignments = {};
-  shuffled.forEach((pid,i) => { assignments[pid] = shuffled[(i+1)%shuffled.length]; });
+  shuffled.forEach((pid,i)=>{ assignments[pid]=shuffled[(i+1)%shuffled.length]; });
   await update(ref(db,`rooms/${roomCode}`), { status:'playing', startedAt:Date.now(), duration:900, assignments });
   document.getElementById('hg-name').textContent = room.name;
   showPage('pg-host-game');
@@ -439,7 +494,7 @@ window.startGame = async () => {
   listenLB('host-lb', true);
 };
  
-// PLAYER HUNT
+// ── Player Hunt ───────────────────────────────────────────────
 function startPlayerHunt(room) {
   const assignments = room.assignments||{};
   myTargetId = assignments[myPid];
@@ -448,118 +503,120 @@ function startPlayerHunt(room) {
   document.getElementById('hunt-pill').textContent = `● ${room.name}`;
   document.getElementById('hunt-found-msg').style.display='none';
   document.getElementById('found-btn').style.display='block';
+  document.getElementById('found-btn').disabled=false;
   showPage('pg-hunt');
   startTimer('p-timer', room.duration||900, room.startedAt, false);
   listenLB('mini-lb', false);
-  // Listen my score
-  onValue(ref(db,`rooms/${roomCode}/players/${myPid}/photos`), snap => {
-    const count = snap.exists() ? Object.keys(snap.val()).length : 0;
-    document.getElementById('hunt-score').textContent = `${count} found`;
+  // live score
+  onValue(ref(db,`rooms/${roomCode}/players/${myPid}/photos`), snap=>{
+    const c = snap.exists()?Object.keys(snap.val()).length:0;
+    document.getElementById('hunt-score').textContent=`${c} found`;
   });
-  // Listen game end
-  onValue(ref(db,`rooms/${roomCode}/status`), snap => {
+  // listen game end
+  onValue(ref(db,`rooms/${roomCode}/status`), snap=>{
     if(snap.val()==='ended'){ clearInterval(gameTimer); get(ref(db,`rooms/${roomCode}`)).then(s=>showGameOver(s.val())); }
   });
 }
  
-function setTarget(players, tid) {
+function setTarget(players, tid){
   const t = players[tid];
   if(!t) return;
   document.getElementById('clue-food').textContent = t.food;
-  document.getElementById('clue-fact').textContent = t.fact;
-  document.getElementById('clue-weekend').textContent = t.weekend;
+  document.getElementById('clue-travel').textContent = t.travel;
   document.getElementById('found-name').textContent = t.name;
 }
  
-// TIMER
-function startTimer(elId, duration, startedAt, isHostTimer) {
+// ── Timer ─────────────────────────────────────────────────────
+function startTimer(elId, duration, startedAt, isHost){
   clearInterval(gameTimer);
-  function tick() {
-    const elapsed = Math.floor((Date.now()-startedAt)/1000);
-    const left = Math.max(0, duration-elapsed);
-    const m = Math.floor(left/60), s = left%60;
-    const el = document.getElementById(elId);
-    if(el) el.textContent = `${m}:${s.toString().padStart(2,'0')}`;
-    if(el) el.style.color = left<60?'#ff4444':left<180?'var(--accent2)':'var(--accent)';
-    if(left<=0){ clearInterval(gameTimer); if(isHostTimer) endGame(); }
+  function tick(){
+    const left = Math.max(0, duration - Math.floor((Date.now()-startedAt)/1000));
+    const m=Math.floor(left/60), s=left%60;
+    const el=document.getElementById(elId);
+    if(el){ el.textContent=`${m}:${s.toString().padStart(2,'0')}`; el.style.color=left<60?'#ff4444':left<180?'var(--accent2)':'var(--accent)'; }
+    if(left<=0){ clearInterval(gameTimer); if(isHost) endGame(); }
   }
-  tick();
-  gameTimer = setInterval(tick, 1000);
+  tick(); gameTimer=setInterval(tick,1000);
 }
  
 window.endGame = async () => {
   clearInterval(gameTimer);
-  await update(ref(db,`rooms/${roomCode}`), { status:'ended', endedAt:Date.now() });
+  await update(ref(db,`rooms/${roomCode}`),{status:'ended',endedAt:Date.now()});
   const snap = await get(ref(db,`rooms/${roomCode}`));
   showGameOver(snap.val());
 };
  
-// LEADERBOARD
-function listenLB(elId, showPhotos) {
-  onValue(ref(db,`rooms/${roomCode}/players`), snap => {
+// ── Leaderboard ───────────────────────────────────────────────
+function listenLB(elId, showPhotos){
+  onValue(ref(db,`rooms/${roomCode}/players`), snap=>{
     if(!snap.exists()) return;
     const players = snap.val();
     const sorted = Object.entries(players)
-      .map(([id,p]) => ({ id, name:p.name, score:Object.keys(p.photos||{}).length, photos:p.photos||{} }))
+      .map(([id,p])=>({id,name:p.name,score:Object.keys(p.photos||{}).length,photos:p.photos||{}}))
       .sort((a,b)=>b.score-a.score);
     const medals=['🥇','🥈','🥉'];
-    const el = document.getElementById(elId);
-    if(!el) return;
+    const el=document.getElementById(elId); if(!el) return;
     if(!sorted.length){ el.innerHTML='<div style="color:var(--muted);text-align:center;padding:.75rem;font-size:.85rem">No scores yet</div>'; return; }
-    el.innerHTML = sorted.map((p,i)=>`
+    el.innerHTML=sorted.map((p,i)=>`
       <div class="lb-row ${i===0?'top1':i===1?'top2':i===2?'top3':''}" style="animation-delay:${i*.04}s">
         <div class="lb-rank">${medals[i]||i+1}</div>
         <div class="lb-name">${esc(p.name)}${p.id===myPid?' <span style="color:var(--accent);font-size:.7rem">(you)</span>':''}</div>
-        ${showPhotos?`<div style="display:flex;gap:.3rem;flex-wrap:wrap">${Object.values(p.photos).slice(0,4).map(ph=>ph.img?`<img class="lb-thumb" src="${ph.img}" alt="">`:'').join('')}</div>`:''}
+        ${showPhotos?`<div class="lb-thumbs">${Object.values(p.photos).slice(0,4).map(ph=>ph.url?`<img class="lb-thumb" src="${esc(ph.url)}" alt="" onerror="this.style.display='none'">`:'').join('')}</div>`:''}
         <div class="lb-score">${p.score} 📸</div>
       </div>`).join('');
   });
 }
  
-// FOUND PHOTO
+// ── Found Photo ───────────────────────────────────────────────
 window.openFoundOverlay = async () => {
   const snap = await get(ref(db,`rooms/${roomCode}/players/${myPid}/photos/${myTargetId}`));
-  if(snap.exists()){ showToast('Already found this person!'); return; }
-  foundPhoto=null;
-  document.getElementById('found-photo').style.display='none';
+  if(snap.exists()){ showToast('Already got this person! 🎉'); return; }
+  foundPhotoData=null;
+  document.getElementById('found-photo-preview').style.display='none';
   document.getElementById('found-video').style.display='block';
   document.getElementById('found-retake').style.display='none';
   document.getElementById('found-overlay').classList.remove('hidden');
-  try {
-    foundCamStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});
-    document.getElementById('found-video').srcObject = foundCamStream;
-  } catch(e){ console.log('cam err',e); }
+  document.getElementById('upload-progress').style.display='none';
+  startFoundCam();
 };
+ 
+async function startFoundCam(){
+  try{
+    foundCamStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});
+    document.getElementById('found-video').srcObject=foundCamStream;
+  }catch(e){ console.log('cam err',e); }
+}
+ 
 window.foundSnap = () => {
   const v=document.getElementById('found-video');
   const c=document.createElement('canvas');
   c.width=v.videoWidth||640; c.height=v.videoHeight||480;
   const ctx=c.getContext('2d');
   ctx.save(); ctx.scale(-1,1); ctx.drawImage(v,-c.width,0,c.width,c.height); ctx.restore();
-  foundPhoto=c.toDataURL('image/jpeg',.6);
-  document.getElementById('found-photo').src=foundPhoto;
-  document.getElementById('found-photo').style.display='block';
+  foundPhotoData=c.toDataURL('image/jpeg',.75);
+  document.getElementById('found-photo-preview').src=foundPhotoData;
+  document.getElementById('found-photo-preview').style.display='block';
   document.getElementById('found-video').style.display='none';
   document.getElementById('found-retake').style.display='block';
   if(foundCamStream) foundCamStream.getTracks().forEach(t=>t.stop());
   showToast('Photo taken! 📸');
 };
+ 
 window.foundRetake = () => {
-  foundPhoto=null;
-  document.getElementById('found-photo').style.display='none';
+  foundPhotoData=null;
+  document.getElementById('found-photo-preview').style.display='none';
   document.getElementById('found-video').style.display='block';
   document.getElementById('found-retake').style.display='none';
-  navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false}).then(s=>{
-    foundCamStream=s; document.getElementById('found-video').srcObject=s;
-  }).catch(e=>console.log(e));
+  startFoundCam();
 };
+ 
 window.foundFileUpload = (e) => {
   const file=e.target.files[0]; if(!file) return;
   const r=new FileReader();
   r.onload=ev=>{
-    foundPhoto=ev.target.result;
-    document.getElementById('found-photo').src=foundPhoto;
-    document.getElementById('found-photo').style.display='block';
+    foundPhotoData=ev.target.result;
+    document.getElementById('found-photo-preview').src=foundPhotoData;
+    document.getElementById('found-photo-preview').style.display='block';
     document.getElementById('found-video').style.display='none';
     document.getElementById('found-retake').style.display='block';
     if(foundCamStream) foundCamStream.getTracks().forEach(t=>t.stop());
@@ -567,49 +624,86 @@ window.foundFileUpload = (e) => {
   };
   r.readAsDataURL(file);
 };
+ 
 window.closeFoundOverlay = () => {
   document.getElementById('found-overlay').classList.add('hidden');
   if(foundCamStream) foundCamStream.getTracks().forEach(t=>t.stop());
 };
+ 
 window.submitFound = async () => {
-  if(!foundPhoto){ showToast('Take a photo first!','err'); return; }
+  if(!foundPhotoData){ showToast('Take a photo first!','err'); return; }
   const btn=document.getElementById('submit-found-btn');
-  btn.disabled=true; btn.textContent='Saving...';
-  await set(ref(db,`rooms/${roomCode}/players/${myPid}/photos/${myTargetId}`), { img:foundPhoto, ts:Date.now() });
-  btn.disabled=false; btn.textContent='Submit ✓';
-  closeFoundOverlay();
-  document.getElementById('hunt-found-msg').style.display='block';
-  document.getElementById('found-btn').style.display='none';
-  showToast('🎉 +1 point!');
-  // Next target
-  setTimeout(async () => {
-    const snap = await get(ref(db,`rooms/${roomCode}`));
-    const room = snap.val();
-    const players = room.players||{};
-    const myPhotos = players[myPid]?.photos||{};
-    const already = new Set([...Object.keys(myPhotos), myPid]);
-    const remaining = Object.keys(players).filter(id=>!already.has(id));
-    if(!remaining.length){
-      document.getElementById('hunt-found-msg').innerHTML='<div style="font-family:\'Syne\',sans-serif;font-weight:700;color:var(--success)">🏆 You found everyone!</div>';
-      document.getElementById('hunt-found-msg').style.display='block';
-      return;
-    }
-    myTargetId = remaining[Math.floor(Math.random()*remaining.length)];
-    setTarget(players, myTargetId);
-    document.getElementById('hunt-found-msg').style.display='none';
-    document.getElementById('found-btn').style.display='block';
-    showToast('🎯 New target!');
-  }, 1200);
+  btn.disabled=true; btn.textContent='Uploading...';
+ 
+  // Show progress bar
+  const progressWrap=document.getElementById('upload-progress');
+  const progressBar=document.getElementById('upload-bar');
+  progressWrap.style.display='block';
+  progressBar.style.width='30%';
+ 
+  try {
+    // Upload to Firebase Storage
+    const path = `rooms/${roomCode}/${myPid}_${myTargetId}_${Date.now()}.jpg`;
+    const storageRef = sRef(storage, path);
+    progressBar.style.width='60%';
+    await uploadString(storageRef, foundPhotoData, 'data_url');
+    progressBar.style.width='85%';
+    const url = await getDownloadURL(storageRef);
+    progressBar.style.width='100%';
+ 
+    // Save URL + metadata to DB
+    const snap = await get(ref(db,`rooms/${roomCode}/players/${myTargetId}`));
+    const targetName = snap.exists() ? snap.val().name : 'Unknown';
+    await set(ref(db,`rooms/${roomCode}/players/${myPid}/photos/${myTargetId}`), {
+      url, targetName, ts:Date.now(), hunter: myPid
+    });
+ 
+    progressWrap.style.display='none';
+    btn.disabled=false; btn.textContent='Submit ✓';
+    closeFoundOverlay();
+    showToast('🎉 +1 point!');
+    document.getElementById('hunt-found-msg').style.display='block';
+    document.getElementById('found-btn').style.display='none';
+ 
+    // Get next target
+    setTimeout(async()=>{
+      const roomSnap = await get(ref(db,`rooms/${roomCode}`));
+      if(!roomSnap.exists()) return;
+      const room = roomSnap.val();
+      const players = room.players||{};
+      const myPhotos = players[myPid]?.photos||{};
+      const already = new Set([...Object.keys(myPhotos), myPid]);
+      const remaining = Object.keys(players).filter(id=>!already.has(id));
+      if(!remaining.length){
+        document.getElementById('hunt-found-msg').innerHTML='<div style="font-family:\'Syne\',sans-serif;font-weight:700;color:var(--success)">🏆 You found everyone! Incredible!</div>';
+        document.getElementById('hunt-found-msg').style.display='block';
+        return;
+      }
+      myTargetId = remaining[Math.floor(Math.random()*remaining.length)];
+      setTarget(players, myTargetId);
+      document.getElementById('hunt-found-msg').style.display='none';
+      document.getElementById('found-btn').style.display='block';
+      document.getElementById('found-btn').disabled=false;
+      showToast('🎯 New target!');
+    }, 1200);
+ 
+  } catch(err) {
+    console.error('Upload error:', err);
+    showToast('Upload failed — try again','err');
+    progressWrap.style.display='none';
+    btn.disabled=false; btn.textContent='Submit ✓';
+  }
 };
  
-// GAME OVER
-function showGameOver(room) {
+// ── Game Over + Collage ───────────────────────────────────────
+async function showGameOver(room) {
   clearInterval(gameTimer);
+  clearSession();
   const players = room.players||{};
   const sorted = Object.entries(players)
-    .map(([id,p])=>({ id, name:p.name, score:Object.keys(p.photos||{}).length }))
+    .map(([id,p])=>({id,name:p.name,score:Object.keys(p.photos||{}).length,photos:p.photos||{}}))
     .sort((a,b)=>b.score-a.score);
-  const medals=['🥇','🥈','🥉'];
+ 
   // Podium
   const top3=sorted.slice(0,3);
   const order=top3.length>=3?[top3[1],top3[0],top3[2]]:top3.length===2?[top3[1],top3[0]]:[top3[0]];
@@ -619,21 +713,82 @@ function showGameOver(room) {
       <div class="podium-name">${esc(p.name)}</div>
       <div class="podium-score">${p.score} 📸</div>
       <div class="podium-bar ${bc[i]}">${em[i]}</div>
-    </div>`:'' ).join('');
+    </div>`:''  ).join('');
+ 
+  // Full LB
+  const medals=['🥇','🥈','🥉'];
   document.getElementById('final-lb').innerHTML=sorted.map((p,i)=>`
     <div class="lb-row ${i===0?'top1':i===1?'top2':i===2?'top3':''}">
       <div class="lb-rank">${medals[i]||i+1}</div>
       <div class="lb-name">${esc(p.name)}</div>
       <div class="lb-score">${p.score} 📸</div>
     </div>`).join('');
+ 
   showPage('pg-gameover');
+ 
+  // Build photo collage
+  const allPhotos = [];
+  for(const [pid, player] of Object.entries(players)){
+    for(const [tid, photo] of Object.entries(player.photos||{})){
+      if(photo.url){ allPhotos.push({ url:photo.url, hunter:player.name, target:photo.targetName||'?' }); }
+    }
+  }
+  allPhotosForDownload = allPhotos;
+ 
+  if(!allPhotos.length){
+    document.getElementById('collage-grid').innerHTML='<div style="color:var(--muted);font-size:.85rem;padding:2rem;text-align:center">No photos yet</div>';
+    return;
+  }
+ 
+  document.getElementById('collage-grid').innerHTML = allPhotos.map((p,i)=>`
+    <div class="collage-item" style="animation:cardIn .4s ease ${i*.06}s both">
+      <img src="${esc(p.url)}" alt="Photo" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="collage-caption">📸 ${esc(p.hunter)} + ${esc(p.target)}</div>
+    </div>`).join('');
 }
  
-// INIT
-async function init() {
-  const code = new URLSearchParams(location.search).get('room');
-  if(code){ await loadRoom(code.toUpperCase()); }
-  else { showPage('pg-home'); }
+// ── Download ZIP ──────────────────────────────────────────────
+window.downloadZip = async () => {
+  if(!allPhotosForDownload.length){ showToast('No photos to download','err'); return; }
+  const btn=document.getElementById('download-btn');
+  btn.disabled=true; btn.textContent='Preparing...';
+  showToast('Downloading photos...');
+ 
+  // Fetch all images and download individually (ZIP needs JSZip lib)
+  // Simple approach: download each photo
+  for(let i=0; i<allPhotosForDownload.length; i++){
+    const photo = allPhotosForDownload[i];
+    try {
+      const response = await fetch(photo.url);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href=url; a.download=`roombreaker_${photo.hunter}_${photo.target}_${i+1}.jpg`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      await new Promise(r=>setTimeout(r,300));
+    } catch(e){ console.error('Download error',e); }
+  }
+  btn.disabled=false; btn.textContent='⬇️ Download All Photos';
+  showToast('All photos downloaded! ✅');
+};
+ 
+// ── Init ──────────────────────────────────────────────────────
+async function init(){
+  const urlCode = new URLSearchParams(location.search).get('room');
+  const session = loadSession();
+ 
+  if(urlCode){
+    // Try to resume session for this room
+    if(session && session.code===urlCode.toUpperCase()){
+      roomCode=urlCode.toUpperCase();
+      await loadRoom(roomCode, session.pid);
+    } else {
+      await loadRoom(urlCode.toUpperCase());
+    }
+  } else {
+    showPage('pg-home');
+  }
 }
 init();
 </script>
