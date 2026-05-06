@@ -117,14 +117,14 @@
 <body>
 <div class="orb orb-1"></div><div class="orb orb-2"></div>
 <div id="toast"></div>
-
+ 
 <div class="page active" id="loading">
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;min-height:100vh;">
     <div class="spinner"></div>
     <div class="text-muted">Connecting...</div>
   </div>
 </div>
-
+ 
 <div class="page" id="home">
   <div class="logo-mark">RoomBreaker</div>
   <h1 class="home-headline">Break<br><span class="outline">the awkward</span><br><span class="pop">silence.</span></h1>
@@ -138,7 +138,7 @@
     <button class="btn btn-primary" style="padding:.85rem 1.2rem;" onclick="joinRoom()">Join</button>
   </div>
 </div>
-
+ 
 <div class="page" id="create">
   <div class="card card-sm" style="margin:auto 1rem;">
     <button class="close-btn" onclick="showPage('home')">✕</button>
@@ -149,7 +149,7 @@
     <button class="btn btn-primary btn-full mt-2" id="create-btn" onclick="createRoom()">Create Room →</button>
   </div>
 </div>
-
+ 
 <div class="page" id="host-share">
   <div class="card card-md text-center" style="margin:auto 1rem;">
     <div class="logo-mark" style="justify-content:center;margin-bottom:1.25rem;">RoomBreaker</div>
@@ -168,7 +168,7 @@
     </div>
   </div>
 </div>
-
+ 
 <div class="page" id="participant">
   <div class="card card-sm" style="margin:auto 1rem;">
     <div class="room-pill" id="p-room-pill">● ROOM</div>
@@ -211,7 +211,7 @@
     </div>
   </div>
 </div>
-
+ 
 <div class="page" id="success">
   <div style="max-width:380px;width:100%;margin:auto;padding:2rem;text-align:center;">
     <div class="success-ring">🎉</div>
@@ -220,7 +220,7 @@
     <button class="btn btn-ghost btn-full" onclick="showPage('home')">Back to Home</button>
   </div>
 </div>
-
+ 
 <div class="page" id="gallery">
   <div class="gallery-top">
     <div>
@@ -237,11 +237,11 @@
     <div class="empty"><div class="empty-icon">🪑</div><p>No one's joined yet.<br>Share the code to get started.</p></div>
   </div>
 </div>
-
+ 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getDatabase, ref, set, get, push, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
+ 
   const firebaseConfig = {
     apiKey: "AIzaSyBtfOQOyYawigdWkRUuBg1OrknDKFVtPBQ",
     authDomain: "roombreaker-238bc.firebaseapp.com",
@@ -251,34 +251,34 @@
     messagingSenderId: "410279961940",
     appId: "1:410279961940:web:7c2973ede0eb2f1d64d4c1"
   };
-
+ 
   const app = initializeApp(firebaseConfig);
   const db  = getDatabase(app);
-
+ 
   let currentRoomCode = null;
   let capturedSelfie  = null;
   let camStream       = null;
   let galleryUnsub    = null;
-
+ 
   function genCode(){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; return Array.from({length:6},()=>c[Math.floor(Math.random()*c.length)]).join(''); }
   function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function roomURL(code){ return `${location.origin}${location.pathname}?room=${code}`; }
-
+ 
   let toastT;
   window.showToast = (msg,err=false)=>{
     const el=document.getElementById('toast');
     el.textContent=msg; el.className='show'+(err?' err':'');
     clearTimeout(toastT); toastT=setTimeout(()=>el.className='',2800);
   };
-
+ 
   window.showPage = (name)=>{
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.getElementById(name).classList.add('active');
     window.scrollTo(0,0);
   };
-
+ 
   function updateURL(code){ history.replaceState(null,'',code?`?room=${code}`:location.pathname); }
-
+ 
   window.createRoom = async ()=>{
     const name=document.getElementById('room-name').value.trim();
     const host=document.getElementById('host-name').value.trim();
@@ -292,7 +292,7 @@
     currentRoomCode=code;
     showHostShare(code,name,host);
   };
-
+ 
   function showHostShare(code,name,host){
     document.getElementById('share-title').textContent=name;
     document.getElementById('share-sub').textContent=`Hosted by ${host}`;
@@ -307,26 +307,26 @@
       document.getElementById('share-count').textContent=`${count} response${count!==1?'s':''}`;
     });
   }
-
+ 
   window.copyCode=()=>{
     navigator.clipboard.writeText(currentRoomCode||'');
     const btn=document.getElementById('copy-code-btn');
     btn.textContent='✓ Copied!'; btn.classList.add('copied');
     setTimeout(()=>{btn.textContent='Copy Code';btn.classList.remove('copied');},2000);
   };
-
+ 
   window.copyLink=()=>{
     const code=currentRoomCode||new URLSearchParams(location.search).get('room');
     navigator.clipboard.writeText(roomURL(code));
     showToast('Link copied!');
   };
-
+ 
   window.joinRoom=async()=>{
     const code=document.getElementById('join-input').value.trim().toUpperCase();
     if(!code){showToast('Enter a room code','err');return;}
     await loadParticipantView(code);
   };
-
+ 
   async function loadParticipantView(code){
     const snap=await get(ref(db,`rooms/${code}`));
     if(!snap.exists()){showToast('Room not found — check the code','err');return;}
@@ -342,7 +342,7 @@
     updateURL(code); showPage('participant');
     setTimeout(startCam,400);
   }
-
+ 
   window.nextStep=(from)=>{
     const ids=['p-name','p-food','p-fact','p-weekend'];
     if(!document.getElementById(ids[from]).value.trim()){showToast('Fill this in first 😊','err');return;}
@@ -353,7 +353,7 @@
       d.className='step'+(i<from+1?' done':i===from+1?' active':'');
     });
   };
-
+ 
   async function startCam(){
     try{
       camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});
@@ -364,7 +364,7 @@
       document.getElementById('retake-btn').style.display='none';
     }catch(e){console.log('Camera error',e);}
   }
-
+ 
   window.snap=()=>{
     const v=document.getElementById('cam-video');
     const c=document.createElement('canvas');
@@ -380,9 +380,9 @@
     if(camStream)camStream.getTracks().forEach(t=>t.stop());
     showToast('Selfie captured! 📸');
   };
-
+ 
   window.retake=()=>{ capturedSelfie=null; document.getElementById('selfie-img').style.display='none'; startCam(); };
-
+ 
   window.fileUpload=(e)=>{
     const file=e.target.files[0]; if(!file)return;
     const r=new FileReader();
@@ -398,7 +398,7 @@
     };
     r.readAsDataURL(file);
   };
-
+ 
   window.submitResponse=async()=>{
     const weekend=document.getElementById('p-weekend').value.trim();
     if(!weekend){showToast('Tell us your weekend vibe!','err');return;}
@@ -414,7 +414,7 @@
     if(camStream)camStream.getTracks().forEach(t=>t.stop());
     showPage('success');
   };
-
+ 
   window.showGallery=()=>{
     if(!currentRoomCode)return;
     get(ref(db,`rooms/${currentRoomCode}`)).then(snap=>{
@@ -447,7 +447,7 @@
     });
     showPage('gallery');
   };
-
+ 
   async function init(){
     const code=new URLSearchParams(location.search).get('room');
     if(code){ await loadParticipantView(code.toUpperCase()); }
